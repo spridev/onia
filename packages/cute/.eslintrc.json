@@ -1,0 +1,73 @@
+{
+  "extends": [
+    "plugin:import/recommended",
+    "plugin:unicorn/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "rules": {
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "index",
+          "type"
+        ],
+        "pathGroups": [
+          {
+            "pattern": "ava",
+            "group": "external",
+            "position": "before"
+          },
+          {
+            "pattern": "@aws-sdk/**",
+            "group": "external",
+            "position": "before"
+          },
+          {
+            "pattern": "@onia/**",
+            "group": "external",
+            "position": "before"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": [
+          "builtin"
+        ],
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "asc"
+        }
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": [
+        "**/*.ts?(x)"
+      ],
+      "parser": "@typescript-eslint/parser",
+      "extends": [
+        "plugin:@typescript-eslint/recommended"
+      ]
+    },
+    {
+      "files": [
+        "**/*.{spec,test}.{js,ts}"
+      ],
+      "extends": [
+        "plugin:ava/recommended"
+      ]
+    }
+  ],
+  "settings": {
+    "import/resolver": {
+      "typescript": {
+        "alwaysTryTypes": true
+      }
+    }
+  }
+}

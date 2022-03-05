@@ -1,0 +1,28 @@
+{
+  "name": "@onia/mock",
+  "description": "AWS Mocking Toolbox",
+  "version": "0.0.0",
+  "license": "MIT",
+  "repository": "git://github.com/spridev/onia",
+  "homepage": "https://github.com/spridev/onia/tree/main/packages/mock",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "files": [
+    "build/**/*"
+  ],
+  "dependencies": {
+    "@types/sinon": "^10.0.0",
+    "sinon": "^13.0.0"
+  },
+  "devDependencies": {
+    "@aws-sdk/client-s3": "^3.0.0",
+    "@aws-sdk/client-sqs": "^3.0.0"
+  },
+  "peerDependencies": {
+    "@aws-sdk/types": "^3.0.0"
+  },
+  "scripts": {
+    "test": "c8 --100 ava --serial --no-worker-threads",
+    "build": "tsc"
+  }
+}

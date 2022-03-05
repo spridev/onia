@@ -1,0 +1,38 @@
+{
+  "extends": [
+    "plugin:import/recommended",
+    "plugin:unicorn/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "**/*.ts?(x)"
+      ],
+      "parser": "@typescript-eslint/parser",
+      "extends": [
+        "plugin:@typescript-eslint/recommended"
+      ],
+      "rules": {
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-empty-function": "off",
+        "@typescript-eslint/no-empty-interface": "off"
+      }
+    },
+    {
+      "files": [
+        "**/*.{spec,test}.{js,ts}"
+      ],
+      "extends": [
+        "plugin:ava/recommended"
+      ]
+    }
+  ],
+  "settings": {
+    "import/resolver": {
+      "typescript": {
+        "alwaysTryTypes": true
+      }
+    }
+  }
+}

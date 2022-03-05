@@ -1,0 +1,27 @@
+{
+  "name": "@onia/cute",
+  "description": "Lambda Style Guide",
+  "version": "0.0.0",
+  "license": "MIT",
+  "repository": "git://github.com/spridev/onia",
+  "homepage": "https://github.com/spridev/onia/tree/main/packages/cute",
+  "files": [
+    "tsconfig.json",
+    ".eslintrc.json",
+    ".prettierrc.json"
+  ],
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "eslint-config-prettier": "^8.0.0",
+    "eslint-import-resolver-typescript": "^2.0.0",
+    "eslint-plugin-ava": "^13.0.0",
+    "eslint-plugin-import": "^2.0.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-unicorn": "^41.0.0"
+  },
+  "peerDependencies": {
+    "eslint": "^8.0.0",
+    "prettier": "^2.0.0"
+  }
+}

@@ -1,0 +1,24 @@
+# General
+
+**/coverage
+**/build
+
+**/.DS_Store
+**/._*
+
+**/*.pem
+
+**/.vs
+**/.vscode
+**/.idea
+
+.env
+.env.test
+
+# Node
+
+**/node_modules
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
