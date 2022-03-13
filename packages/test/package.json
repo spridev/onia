@@ -1,7 +1,7 @@
 {
   "name": "@onia/test",
   "description": "AWS Testing Toolbox",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "license": "MIT",
   "repository": "git://github.com/spridev/onia",
   "homepage": "https://github.com/spridev/onia/tree/main/packages/test",
