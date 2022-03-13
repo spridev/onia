@@ -21,7 +21,7 @@ test('wraps a lambda promise handler', async function (t) {
       },
     });
 
-    t.truthy(context.functionName);
+    t.like(context, { functionName: 'function-name' });
 
     return { body: 'onia' };
   }
@@ -76,7 +76,7 @@ test('wraps a lambda callback handler', async function (t) {
       },
     });
 
-    t.truthy(context.functionName);
+    t.like(context, { functionName: 'function-name' });
 
     callback(undefined, { body: 'onia' });
   }
