@@ -23,7 +23,7 @@ test('wraps a promise handler', async function (t) {
     return { body: 'onia' };
   }
 
-  const wrapper = Wrapper.fromPromise(handler);
+  const wrapper = Wrapper.promise(handler);
 
   const result = await wrapper.call({
     headers: {
@@ -51,7 +51,7 @@ test('wraps a callback handler', async function (t) {
     callback(undefined, { body: 'onia' });
   }
 
-  const wrapper = Wrapper.fromCallback(handler);
+  const wrapper = Wrapper.callback(handler);
 
   const result = await wrapper.call({
     request: {
@@ -67,7 +67,7 @@ test('wraps a callback handler', async function (t) {
 test('catches errors thrown within a promise handler', async function (t) {
   const error = new Error('💩');
 
-  const wrapper = Wrapper.fromPromise(async function () {
+  const wrapper = Wrapper.promise(async function () {
     throw error;
   });
 
@@ -77,7 +77,7 @@ test('catches errors thrown within a promise handler', async function (t) {
 test('catches errors thrown within a callback handler', async function (t) {
   const error = new Error('💩');
 
-  const wrapper = Wrapper.fromCallback(function (event, context, callback) {
+  const wrapper = Wrapper.callback(function (event, context, callback) {
     callback(error);
   });
 
