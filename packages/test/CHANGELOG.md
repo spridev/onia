@@ -1,5 +1,11 @@
 # @onia/test
 
+## 0.2.1
+
+### Patch Changes
+
+- 39a80d6: Allow overriding any event or context value using `undefined` when calling a handler.
+
 ## 0.2.0
 
 ### Minor Changes
