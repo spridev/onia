@@ -30,7 +30,7 @@ export class Wrapper<TEvent, TResult> {
   /**
    * Create a new wrapper from promise.
    */
-  static fromPromise<TEvent, TResult>(
+  static promise<TEvent, TResult>(
     handler: (event: TEvent, context: Context) => Promise<TResult | undefined>
   ): Wrapper<TEvent, TResult> {
     return new Wrapper(handler);
@@ -39,7 +39,7 @@ export class Wrapper<TEvent, TResult> {
   /**
    * Create a new wrapper from callback.
    */
-  static fromCallback<TEvent, TResult>(
+  static callback<TEvent, TResult>(
     handler: (
       event: TEvent,
       context: Context,
@@ -74,9 +74,11 @@ export class Wrapper<TEvent, TResult> {
     event: DeepPartial<TEvent> = {},
     context: DeepPartial<Context> = {}
   ): Promise<TResult | undefined> {
+    const options = { nullOverride: true };
+
     return this.$handler(
-      Hoek.applyToDefaults(this.$event, event) as TEvent,
-      Hoek.applyToDefaults(this.$context, context) as Context
+      Hoek.applyToDefaults(this.$event, event, options) as TEvent,
+      Hoek.applyToDefaults(this.$context, context, options) as Context
     );
   }
 }
