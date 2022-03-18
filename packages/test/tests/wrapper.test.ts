@@ -113,23 +113,19 @@ test('accepts a default context', async function (t) {
     event: APIGatewayProxyEventV2,
     context: Context
   ): Promise<APIGatewayProxyResultV2> {
-    t.like(context, {
-      functionName: 'onia',
-    });
+    t.like(context, { functionName: 'onia' });
 
     return { body: 'onia' };
   }
 
-  const wrapper = new Wrapper(handler).context({
-    functionName: 'onia',
-  });
+  const wrapper = new Wrapper(handler).context({ functionName: 'onia' });
 
   const result = await wrapper.call();
 
   t.like(result, { body: 'onia' });
 });
 
-test('overrides the default event', async function (t) {
+test('overrides the default event with a value', async function (t) {
   async function handler(
     event: APIGatewayProxyEventV2
   ): Promise<APIGatewayProxyResultV2> {
@@ -157,28 +153,64 @@ test('overrides the default event', async function (t) {
   t.like(result, { body: 'onia' });
 });
 
-test('overrides the default context', async function (t) {
+test('overrides the default event with undefined', async function (t) {
   async function handler(
-    event: APIGatewayProxyEventV2,
-    context: Context
+    event: APIGatewayProxyEventV2
   ): Promise<APIGatewayProxyResultV2> {
-    t.like(context, {
-      functionName: 'spri',
+    t.like(event, {
+      headers: {
+        'Content-Type': undefined,
+      },
     });
 
     return { body: 'onia' };
   }
 
-  const wrapper = new Wrapper(handler).context({
-    functionName: 'onia',
+  const wrapper = new Wrapper(handler).event({
+    headers: {
+      'Content-Type': 'text/plain',
+    },
   });
 
-  const result = await wrapper.call(
-    {},
-    {
-      functionName: 'spri',
-    }
-  );
+  const result = await wrapper.call({
+    headers: {
+      'Content-Type': undefined,
+    },
+  });
+
+  t.like(result, { body: 'onia' });
+});
+
+test('overrides the default context with a value', async function (t) {
+  async function handler(
+    event: APIGatewayProxyEventV2,
+    context: Context
+  ): Promise<APIGatewayProxyResultV2> {
+    t.like(context, { functionName: 'spri' });
+
+    return { body: 'onia' };
+  }
+
+  const wrapper = new Wrapper(handler).context({ functionName: 'onia' });
+
+  const result = await wrapper.call({}, { functionName: 'spri' });
+
+  t.like(result, { body: 'onia' });
+});
+
+test('overrides the default context with undefined', async function (t) {
+  async function handler(
+    event: APIGatewayProxyEventV2,
+    context: Context
+  ): Promise<APIGatewayProxyResultV2> {
+    t.like(context, { functionName: undefined });
+
+    return { body: 'onia' };
+  }
+
+  const wrapper = new Wrapper(handler).context({ functionName: 'onia' });
+
+  const result = await wrapper.call({}, { functionName: undefined });
 
   t.like(result, { body: 'onia' });
 });

@@ -74,9 +74,11 @@ export class Wrapper<TEvent, TResult> {
     event: DeepPartial<TEvent> = {},
     context: DeepPartial<Context> = {}
   ): Promise<TResult | undefined> {
+    const options = { nullOverride: true };
+
     return this.$handler(
-      Hoek.applyToDefaults(this.$event, event) as TEvent,
-      Hoek.applyToDefaults(this.$context, context) as Context
+      Hoek.applyToDefaults(this.$event, event, options) as TEvent,
+      Hoek.applyToDefaults(this.$context, context, options) as Context
     );
   }
 }
