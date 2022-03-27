@@ -1,1 +1,2 @@
-export * from './wrapper';
+// Gateway
+export * from './gateway-wrapper';
