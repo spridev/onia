@@ -6,7 +6,7 @@ import { Callback, Context } from 'aws-lambda';
 
 import { DeepPartial } from './types/deep-partial';
 
-export class Wrapper<TEvent, TResult> {
+export class GatewayWrapper<TEvent, TResult> {
   /**
    * The wrapper event.
    */
@@ -32,8 +32,8 @@ export class Wrapper<TEvent, TResult> {
    */
   static promise<TEvent, TResult>(
     handler: (event: TEvent, context: Context) => Promise<TResult | undefined>
-  ): Wrapper<TEvent, TResult> {
-    return new Wrapper(handler);
+  ): GatewayWrapper<TEvent, TResult> {
+    return new GatewayWrapper(handler);
   }
 
   /**
@@ -45,14 +45,14 @@ export class Wrapper<TEvent, TResult> {
       context: Context,
       callback: Callback<TResult>
     ) => void
-  ): Wrapper<TEvent, TResult> {
-    return new Wrapper(promisify(handler));
+  ): GatewayWrapper<TEvent, TResult> {
+    return new GatewayWrapper(promisify(handler));
   }
 
   /**
    * Set the wrapper event.
    */
-  event(event: DeepPartial<TEvent>): Wrapper<TEvent, TResult> {
+  event(event: DeepPartial<TEvent>): GatewayWrapper<TEvent, TResult> {
     this.$event = event;
 
     return this;
@@ -61,7 +61,7 @@ export class Wrapper<TEvent, TResult> {
   /**
    * Set the wrapper context.
    */
-  context(context: DeepPartial<Context>): Wrapper<TEvent, TResult> {
+  context(context: DeepPartial<Context>): GatewayWrapper<TEvent, TResult> {
     this.$context = context;
 
     return this;
