@@ -22,5 +22,6 @@ jobs:
           node-version: ${{ matrix.node }}
       - run: npm i -g npm@8
       - run: npm ci
+      - run: npm run build -ws --if-present
       - run: npm run lint
       - run: npm run test -ws --if-present
