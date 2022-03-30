@@ -21,7 +21,7 @@
     "@types/aws-lambda": "^8.0.0"
   },
   "scripts": {
-    "test": "c8 --100 ava --serial --no-worker-threads",
+    "test": "c8 --100 ava --serial",
     "build": "tsc"
   }
 }
