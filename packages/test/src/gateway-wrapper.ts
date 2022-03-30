@@ -18,7 +18,7 @@ export class GatewayWrapper<TEvent, TResult> {
   private $context: DeepPartial<Context> = {};
 
   /**
-   * Create a new wrapper.
+   * Create a new gateway wrapper.
    */
   constructor(
     private $handler: (
@@ -28,7 +28,7 @@ export class GatewayWrapper<TEvent, TResult> {
   ) {}
 
   /**
-   * Create a new wrapper from promise.
+   * Create a new gateway wrapper from promise.
    */
   static promise<TEvent, TResult>(
     handler: (event: TEvent, context: Context) => Promise<TResult | undefined>
@@ -37,7 +37,7 @@ export class GatewayWrapper<TEvent, TResult> {
   }
 
   /**
-   * Create a new wrapper from callback.
+   * Create a new gateway wrapper from callback.
    */
   static callback<TEvent, TResult>(
     handler: (
