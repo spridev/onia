@@ -23,7 +23,11 @@
   },
   "scripts": {
     "lint": "eslint .",
+    "test": "npm run test -ws --if-present",
+    "build": "npm run build -ws --if-present",
     "version": "changeset version",
-    "publish": "changeset publish"
+    "publish": "changeset publish",
+    "prepare": "npm run build",
+    "pretest": "npm run lint"
   }
 }
