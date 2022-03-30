@@ -11,13 +11,17 @@
     "build/**/*"
   ],
   "dependencies": {
+    "@aws-sdk/client-cognito-identity-provider": "^3.0.0",
     "@hapi/hoek": "^9.0.0"
+  },
+  "devDependencies": {
+    "@onia/mock": "^0.1.0"
   },
   "peerDependencies": {
     "@types/aws-lambda": "^8.0.0"
   },
   "scripts": {
-    "test": "c8 --100 ava",
+    "test": "c8 --100 ava --serial --no-worker-threads",
     "build": "tsc"
   }
 }
