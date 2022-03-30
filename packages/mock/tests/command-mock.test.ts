@@ -1,4 +1,4 @@
-import test from 'ava';
+import anyTest, { TestFn } from 'ava';
 
 import {
   CreateBucketCommand,
@@ -15,23 +15,29 @@ const deleteCommand = new DeleteBucketCommand({ Bucket: 'onia' });
 const headOneCommand = new HeadBucketCommand({ Bucket: 'onia-one' });
 const headTwoCommand = new HeadBucketCommand({ Bucket: 'onia-two' });
 
-let mock: ClientType<S3Client>;
+interface TestContext {
+  mock: ClientType<S3Client>;
+}
 
-test.beforeEach(function () {
-  mock = new ClientMock(S3Client);
+const test = anyTest as TestFn<TestContext>;
+
+test.beforeEach(function (t) {
+  t.context.mock = new ClientMock(S3Client);
 });
 
-test.afterEach.always(function () {
-  mock.restore();
+test.afterEach.always(function (t) {
+  t.context.mock.restore();
 });
 
 // Mock
 
 test('returns the underlying sinon stub', function (t) {
-  t.truthy(mock.on(CreateBucketCommand).stub());
+  t.truthy(t.context.mock.on(CreateBucketCommand).stub());
 });
 
 test('returns the number of recorded calls', async function (t) {
+  const { mock } = t.context;
+
   const client = new S3Client({});
 
   const create = mock.on(CreateBucketCommand).resolves({});
@@ -52,6 +58,8 @@ test('returns the number of recorded calls', async function (t) {
 });
 
 test('returns true if the stub was called at least once', async function (t) {
+  const { mock } = t.context;
+
   const client = new S3Client({});
 
   const create = mock.on(CreateBucketCommand).resolves({});
@@ -72,6 +80,8 @@ test('returns true if the stub was called at least once', async function (t) {
 });
 
 test('returns all recorded calls', async function (t) {
+  const { mock } = t.context;
+
   const client = new S3Client({});
 
   const head = mock.on(HeadBucketCommand).resolves({});
@@ -83,6 +93,8 @@ test('returns all recorded calls', async function (t) {
 });
 
 test('returns the nth recorded call', async function (t) {
+  const { mock } = t.context;
+
   const client = new S3Client({});
 
   const head = mock.on(HeadBucketCommand).resolves({});
@@ -100,6 +112,8 @@ test('returns the nth recorded call', async function (t) {
 // Command
 
 test('makes the stub return the given value', async function (t) {
+  const { mock } = t.context;
+
   const client = new S3Client({});
 
   const response = { Location: 'us-east-1' };
@@ -110,6 +124,8 @@ test('makes the stub return the given value', async function (t) {
 });
 
 test('makes the stub return the given error', async function (t) {
+  const { mock } = t.context;
+
   const client = new S3Client({});
 
   const error = new Error('💩');
@@ -120,6 +136,8 @@ test('makes the stub return the given error', async function (t) {
 });
 
 test('makes the stub call the provided function', async function (t) {
+  const { mock } = t.context;
+
   const client = new S3Client({});
 
   const response = { Location: 'us-east-1' };
@@ -134,6 +152,8 @@ test('makes the stub call the provided function', async function (t) {
 });
 
 test('defines the command behavior on the nth call', async function (t) {
+  const { mock } = t.context;
+
   const client = new S3Client({});
 
   mock

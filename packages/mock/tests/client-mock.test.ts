@@ -1,4 +1,4 @@
-import test from 'ava';
+import anyTest, { TestFn } from 'ava';
 
 import {
   CreateQueueCommand,
@@ -15,23 +15,29 @@ const deleteCommand = new DeleteQueueCommand({ QueueUrl: 'onia' });
 const listOneCommand = new ListQueuesCommand({ MaxResults: 1 });
 const listTwoCommand = new ListQueuesCommand({ MaxResults: 2 });
 
-let mock: ClientType<SQSClient>;
+interface TestContext {
+  mock: ClientType<SQSClient>;
+}
 
-test.beforeEach(function () {
-  mock = new ClientMock(SQSClient);
+const test = anyTest as TestFn<TestContext>;
+
+test.beforeEach(function (t) {
+  t.context.mock = new ClientMock(SQSClient);
 });
 
-test.afterEach.always(function () {
-  mock.restore();
+test.afterEach.always(function (t) {
+  t.context.mock.restore();
 });
 
 // Mock
 
 test('returns the underlying sinon stub', function (t) {
-  t.truthy(mock.stub());
+  t.truthy(t.context.mock.stub());
 });
 
 test('returns the number of recorded calls', async function (t) {
+  const { mock } = t.context;
+
   const client = new SQSClient({});
 
   mock.on(CreateQueueCommand).resolves({});
@@ -49,6 +55,8 @@ test('returns the number of recorded calls', async function (t) {
 });
 
 test('returns true if the stub was called at least once', async function (t) {
+  const { mock } = t.context;
+
   const client = new SQSClient({});
 
   mock.on(CreateQueueCommand).resolves({});
@@ -61,6 +69,8 @@ test('returns true if the stub was called at least once', async function (t) {
 });
 
 test('returns all recorded calls', async function (t) {
+  const { mock } = t.context;
+
   const client = new SQSClient({});
 
   mock.on(CreateQueueCommand).resolves({});
@@ -73,6 +83,8 @@ test('returns all recorded calls', async function (t) {
 });
 
 test('returns the nth recorded call', async function (t) {
+  const { mock } = t.context;
+
   const client = new SQSClient({});
 
   mock.on(ListQueuesCommand).resolves({});
@@ -90,6 +102,8 @@ test('returns the nth recorded call', async function (t) {
 // Client
 
 test('resets the stub history', async function (t) {
+  const { mock } = t.context;
+
   const client = new SQSClient({});
 
   mock.on(CreateQueueCommand).resolves({});
@@ -106,6 +120,8 @@ test('resets the stub history', async function (t) {
 });
 
 test('restores the stub behavior', async function (t) {
+  const { mock } = t.context;
+
   const client = new SQSClient({});
 
   const createResponse = { QueueUrl: 'queue-url' };
@@ -124,6 +140,8 @@ test('restores the stub behavior', async function (t) {
 });
 
 test('restores the stub behavior if the client is already mocked', async function (t) {
+  const { mock } = t.context;
+
   const client = new SQSClient({});
 
   const createResponse = { QueueUrl: 'queue-url' };
@@ -142,6 +160,8 @@ test('restores the stub behavior if the client is already mocked', async functio
 });
 
 test('defines the command behavior by type', async function (t) {
+  const { mock } = t.context;
+
   const client = new SQSClient({});
 
   const createResponse = { QueueUrl: 'queue-url' };
@@ -155,6 +175,8 @@ test('defines the command behavior by type', async function (t) {
 });
 
 test('defines the command behavior by input', async function (t) {
+  const { mock } = t.context;
+
   const client = new SQSClient({});
 
   const listOneResponse = { QueueUrls: ['1'] };
