@@ -12,6 +12,7 @@
   ],
   "dependencies": {
     "@aws-sdk/client-cognito-identity-provider": "^3.0.0",
+    "@aws-sdk/client-ssm": "^3.0.0",
     "@hapi/hoek": "^9.0.0"
   },
   "devDependencies": {

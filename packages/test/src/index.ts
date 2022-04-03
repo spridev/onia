@@ -5,3 +5,6 @@ export * from './cognito-user';
 
 // Gateway
 export * from './gateway-wrapper';
+
+// System
+export * from './system-store';
