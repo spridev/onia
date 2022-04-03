@@ -1,5 +1,16 @@
 # @onia/test
 
+## 0.3.0
+
+### Minor Changes
+
+- 7c0099e: Rename `Wrapper` class to `GatewayWrapper`.
+
+### Patch Changes
+
+- 4826cf6: Create a `CognitoClient` class to make the creation and deletion of users easier.
+- d20ad9c: Create a `SystemStore` class to populate environment variables from SSM parameters.
+
 ## 0.2.1
 
 ### Patch Changes
