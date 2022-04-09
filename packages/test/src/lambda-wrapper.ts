@@ -6,7 +6,7 @@ import { Callback, Context } from 'aws-lambda';
 
 import { DeepPartial } from './types/deep-partial';
 
-export class GatewayWrapper<TEvent, TResult> {
+export class LambdaWrapper<TEvent, TResult> {
   /**
    * The wrapper event.
    */
@@ -18,7 +18,7 @@ export class GatewayWrapper<TEvent, TResult> {
   private $context: DeepPartial<Context> = {};
 
   /**
-   * Create a new gateway wrapper.
+   * Create a new lambda wrapper.
    */
   constructor(
     private $handler: (
@@ -28,16 +28,16 @@ export class GatewayWrapper<TEvent, TResult> {
   ) {}
 
   /**
-   * Create a new gateway wrapper from promise.
+   * Create a new lambda wrapper from promise.
    */
   static promise<TEvent, TResult>(
     handler: (event: TEvent, context: Context) => Promise<TResult | undefined>
-  ): GatewayWrapper<TEvent, TResult> {
-    return new GatewayWrapper(handler);
+  ): LambdaWrapper<TEvent, TResult> {
+    return new LambdaWrapper(handler);
   }
 
   /**
-   * Create a new gateway wrapper from callback.
+   * Create a new lambda wrapper from callback.
    */
   static callback<TEvent, TResult>(
     handler: (
@@ -45,14 +45,14 @@ export class GatewayWrapper<TEvent, TResult> {
       context: Context,
       callback: Callback<TResult>
     ) => void
-  ): GatewayWrapper<TEvent, TResult> {
-    return new GatewayWrapper(promisify(handler));
+  ): LambdaWrapper<TEvent, TResult> {
+    return new LambdaWrapper(promisify(handler));
   }
 
   /**
    * Set the wrapper event.
    */
-  event(event: DeepPartial<TEvent>): GatewayWrapper<TEvent, TResult> {
+  event(event: DeepPartial<TEvent>): LambdaWrapper<TEvent, TResult> {
     this.$event = event;
 
     return this;
@@ -61,7 +61,7 @@ export class GatewayWrapper<TEvent, TResult> {
   /**
    * Set the wrapper context.
    */
-  context(context: DeepPartial<Context>): GatewayWrapper<TEvent, TResult> {
+  context(context: DeepPartial<Context>): LambdaWrapper<TEvent, TResult> {
     this.$context = context;
 
     return this;

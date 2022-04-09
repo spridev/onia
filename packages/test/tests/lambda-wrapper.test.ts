@@ -8,7 +8,7 @@ import {
   PreSignUpTriggerEvent,
 } from 'aws-lambda';
 
-import { GatewayWrapper } from '../src';
+import { LambdaWrapper } from '../src';
 
 test('wraps a promise handler', async function (t) {
   async function handler(
@@ -23,7 +23,7 @@ test('wraps a promise handler', async function (t) {
     return { body: 'onia' };
   }
 
-  const wrapper = GatewayWrapper.promise(handler);
+  const wrapper = LambdaWrapper.promise(handler);
 
   const result = await wrapper.call({
     headers: {
@@ -51,7 +51,7 @@ test('wraps a callback handler', async function (t) {
     callback(undefined, { body: 'onia' });
   }
 
-  const wrapper = GatewayWrapper.callback(handler);
+  const wrapper = LambdaWrapper.callback(handler);
 
   const result = await wrapper.call({
     request: {
@@ -67,7 +67,7 @@ test('wraps a callback handler', async function (t) {
 test('catches errors thrown within a promise handler', async function (t) {
   const error = new Error('💩');
 
-  const wrapper = GatewayWrapper.promise(async function () {
+  const wrapper = LambdaWrapper.promise(async function () {
     throw error;
   });
 
@@ -77,7 +77,7 @@ test('catches errors thrown within a promise handler', async function (t) {
 test('catches errors thrown within a callback handler', async function (t) {
   const error = new Error('💩');
 
-  const wrapper = GatewayWrapper.callback(function (event, context, callback) {
+  const wrapper = LambdaWrapper.callback(function (event, context, callback) {
     callback(error);
   });
 
@@ -97,7 +97,7 @@ test('accepts a default event', async function (t) {
     return { body: 'onia' };
   }
 
-  const wrapper = new GatewayWrapper(handler).event({
+  const wrapper = new LambdaWrapper(handler).event({
     headers: {
       'Content-Type': 'text/plain',
     },
@@ -118,7 +118,7 @@ test('accepts a default context', async function (t) {
     return { body: 'onia' };
   }
 
-  const wrapper = new GatewayWrapper(handler).context({ functionName: 'onia' });
+  const wrapper = new LambdaWrapper(handler).context({ functionName: 'onia' });
 
   const result = await wrapper.call();
 
@@ -138,7 +138,7 @@ test('overrides the default event with a value', async function (t) {
     return { body: 'onia' };
   }
 
-  const wrapper = new GatewayWrapper(handler).event({
+  const wrapper = new LambdaWrapper(handler).event({
     headers: {
       'Content-Type': 'text/plain',
     },
@@ -166,7 +166,7 @@ test('overrides the default event with undefined', async function (t) {
     return { body: 'onia' };
   }
 
-  const wrapper = new GatewayWrapper(handler).event({
+  const wrapper = new LambdaWrapper(handler).event({
     headers: {
       'Content-Type': 'text/plain',
     },
@@ -191,7 +191,7 @@ test('overrides the default context with a value', async function (t) {
     return { body: 'onia' };
   }
 
-  const wrapper = new GatewayWrapper(handler).context({ functionName: 'onia' });
+  const wrapper = new LambdaWrapper(handler).context({ functionName: 'onia' });
 
   const result = await wrapper.call({}, { functionName: 'spri' });
 
@@ -208,7 +208,7 @@ test('overrides the default context with undefined', async function (t) {
     return { body: 'onia' };
   }
 
-  const wrapper = new GatewayWrapper(handler).context({ functionName: 'onia' });
+  const wrapper = new LambdaWrapper(handler).context({ functionName: 'onia' });
 
   const result = await wrapper.call({}, { functionName: undefined });
 
