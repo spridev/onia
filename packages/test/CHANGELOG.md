@@ -1,5 +1,11 @@
 # @onia/test
 
+## 0.3.1
+
+### Patch Changes
+
+- 1d27565: Rename `GatewayWrapper` class to `LambdaWrapper`.
+
 ## 0.3.0
 
 ### Minor Changes
