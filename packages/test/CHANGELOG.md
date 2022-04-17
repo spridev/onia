@@ -1,5 +1,11 @@
 # @onia/test
 
+## 0.3.2
+
+### Patch Changes
+
+- 866fc66: Export `DeepPartial` type.
+
 ## 0.3.1
 
 ### Patch Changes
