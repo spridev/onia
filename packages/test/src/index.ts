@@ -8,3 +8,6 @@ export * from './lambda-wrapper';
 
 // System
 export * from './system-store';
+
+// Types
+export * from './types/deep-partial';
