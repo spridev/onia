@@ -9,7 +9,6 @@ import {
 
 import { CognitoFlow } from './cognito-flow';
 import { CognitoUser } from './cognito-user';
-
 import { invariant } from './utils/invariant';
 
 const client = new CognitoIdentityProviderClient({});

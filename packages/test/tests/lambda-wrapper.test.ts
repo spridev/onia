@@ -1,6 +1,8 @@
 import test from 'ava';
 
-import {
+import { LambdaWrapper } from '../src';
+
+import type {
   APIGatewayProxyEventV2,
   APIGatewayProxyResultV2,
   Callback,
@@ -8,15 +10,13 @@ import {
   PreSignUpTriggerEvent,
 } from 'aws-lambda';
 
-import { LambdaWrapper } from '../src';
-
 test('wraps a promise handler', async function (t) {
   async function handler(
     event: APIGatewayProxyEventV2
   ): Promise<APIGatewayProxyResultV2> {
     t.like(event, {
       headers: {
-        'Content-Type': 'text/plain',
+        'content-type': 'text/plain',
       },
     });
 
@@ -27,7 +27,7 @@ test('wraps a promise handler', async function (t) {
 
   const result = await wrapper.call({
     headers: {
-      'Content-Type': 'text/plain',
+      'content-type': 'text/plain',
     },
   });
 
@@ -90,7 +90,7 @@ test('accepts a default event', async function (t) {
   ): Promise<APIGatewayProxyResultV2> {
     t.like(event, {
       headers: {
-        'Content-Type': 'text/plain',
+        'content-type': 'text/plain',
       },
     });
 
@@ -99,7 +99,7 @@ test('accepts a default event', async function (t) {
 
   const wrapper = new LambdaWrapper(handler).event({
     headers: {
-      'Content-Type': 'text/plain',
+      'content-type': 'text/plain',
     },
   });
 
@@ -131,7 +131,7 @@ test('overrides the default event with a value', async function (t) {
   ): Promise<APIGatewayProxyResultV2> {
     t.like(event, {
       headers: {
-        'Content-Type': 'application/json',
+        'content-type': 'application/json',
       },
     });
 
@@ -140,13 +140,13 @@ test('overrides the default event with a value', async function (t) {
 
   const wrapper = new LambdaWrapper(handler).event({
     headers: {
-      'Content-Type': 'text/plain',
+      'content-type': 'text/plain',
     },
   });
 
   const result = await wrapper.call({
     headers: {
-      'Content-Type': 'application/json',
+      'content-type': 'application/json',
     },
   });
 
@@ -159,7 +159,7 @@ test('overrides the default event with undefined', async function (t) {
   ): Promise<APIGatewayProxyResultV2> {
     t.like(event, {
       headers: {
-        'Content-Type': undefined,
+        'content-type': undefined,
       },
     });
 
@@ -168,13 +168,13 @@ test('overrides the default event with undefined', async function (t) {
 
   const wrapper = new LambdaWrapper(handler).event({
     headers: {
-      'Content-Type': 'text/plain',
+      'content-type': 'text/plain',
     },
   });
 
   const result = await wrapper.call({
     headers: {
-      'Content-Type': undefined,
+      'content-type': undefined,
     },
   });
 

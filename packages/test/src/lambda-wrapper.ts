@@ -2,9 +2,9 @@ import { promisify } from 'node:util';
 
 import * as Hoek from '@hapi/hoek';
 
-import { Callback, Context } from 'aws-lambda';
-
 import { DeepPartial } from './types/deep-partial';
+
+import type { Callback, Context } from 'aws-lambda';
 
 export class LambdaWrapper<TEvent, TResult> {
   /**
