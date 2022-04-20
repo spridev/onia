@@ -21,15 +21,15 @@ import type { Context } from 'aws-lambda';
 const parsers = [
   {
     mime: /^text\/.+$/,
-    parse: (body?: string) => body,
+    parse: (body: string) => body,
   },
   {
     mime: /^application\/(?:.+\+)?json$/,
-    parse: (body?: string) => (body?.length ? JSON.parse(body) : {}),
+    parse: (body: string) => JSON.parse(body),
   },
   {
     mime: 'application/x-www-form-urlencoded',
-    parse: (body?: string) => (body?.length ? Querystring.parse(body) : {}),
+    parse: (body: string) => Querystring.parse(body),
   },
 ];
 
@@ -61,6 +61,10 @@ function parseAuth(event: AWSEvent): GateAuth {
  * Parse the event payload.
  */
 function parsePayload<T>(body?: string, type?: string): T {
+  if (!body || body.length === 0) {
+    return {} as T;
+  }
+
   if (!type || type.length === 0) {
     throw Boom.badRequest('Missing content-type header');
   }
