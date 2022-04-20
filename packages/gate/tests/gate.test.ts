@@ -210,48 +210,6 @@ test('parses the event text payload', async function (t) {
   await wrapper.call(withText('hello world'));
 });
 
-test('parses the event form payload when empty', async function (t) {
-  const gate = new Gate();
-
-  const handler = gate.handler((event) => {
-    t.deepEqual(event.payload, {});
-
-    return {};
-  });
-
-  const wrapper = LambdaWrapper.promise(handler);
-
-  await wrapper.call(withForm(''));
-});
-
-test('parses the event json payload when empty', async function (t) {
-  const gate = new Gate();
-
-  const handler = gate.handler((event) => {
-    t.deepEqual(event.payload, {});
-
-    return {};
-  });
-
-  const wrapper = LambdaWrapper.promise(handler);
-
-  await wrapper.call(withJson(''));
-});
-
-test('parses the event text payload when empty', async function (t) {
-  const gate = new Gate();
-
-  const handler = gate.handler((event) => {
-    t.is(event.payload, '');
-
-    return {};
-  });
-
-  const wrapper = LambdaWrapper.promise(handler);
-
-  await wrapper.call(withText(''));
-});
-
 test('parses the event context', async function (t) {
   const gate = new Gate();
 
@@ -280,6 +238,34 @@ test('parses the raw event', async function (t) {
   await wrapper.call(withText('onia'));
 });
 
+test('ignores when the payload is empty', async function (t) {
+  const gate = new Gate();
+
+  const handler = gate.handler((event) => {
+    t.deepEqual(event.payload, {});
+
+    return {};
+  });
+
+  const wrapper = LambdaWrapper.promise(handler);
+
+  await wrapper.call({ body: '' });
+});
+
+test('ignores when the payload is missing', async function (t) {
+  const gate = new Gate();
+
+  const handler = gate.handler((event) => {
+    t.deepEqual(event.payload, {});
+
+    return {};
+  });
+
+  const wrapper = LambdaWrapper.promise(handler);
+
+  await wrapper.call({ body: undefined });
+});
+
 test('returns 400 when the payload type is missing', async function (t) {
   const gate = new Gate();
 
@@ -287,7 +273,7 @@ test('returns 400 when the payload type is missing', async function (t) {
 
   const wrapper = LambdaWrapper.promise(handler);
 
-  const result = await wrapper.call();
+  const result = await wrapper.call({ body: 'onia' });
 
   if (typeof result === 'string') {
     return t.fail();
@@ -305,7 +291,7 @@ test('returns 400 when the payload type is invalid', async function (t) {
 
   const handler = gate.handler(() => ({ statusCode: 200 }));
 
-  const wrapper = LambdaWrapper.promise(handler);
+  const wrapper = LambdaWrapper.promise(handler).event(withText('onia'));
 
   const result = await wrapper.call({
     headers: {
@@ -329,7 +315,7 @@ test('returns 415 when the payload type is not supported', async function (t) {
 
   const handler = gate.handler(() => ({ statusCode: 200 }));
 
-  const wrapper = LambdaWrapper.promise(handler);
+  const wrapper = LambdaWrapper.promise(handler).event(withText('onia'));
 
   const result = await wrapper.call({
     headers: {
@@ -353,10 +339,9 @@ test('returns 400 when the payload type does not match the content', async funct
 
   const handler = gate.handler(() => ({ statusCode: 200 }));
 
-  const wrapper = LambdaWrapper.promise(handler);
+  const wrapper = LambdaWrapper.promise(handler).event(withText('onia'));
 
   const result = await wrapper.call({
-    body: 'onia',
     headers: {
       'content-type': 'application/json',
     },
