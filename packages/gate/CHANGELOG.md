@@ -1,5 +1,12 @@
 # @onia/gate
 
+## 0.1.2
+
+### Patch Changes
+
+- 7f30471: Bump `@hapi/boom` to `v10.0.0`.
+- 73f5ce2: Bump `@hapi/hoek` to `v10.0.0`.
+
 ## 0.1.1
 
 ### Patch Changes
