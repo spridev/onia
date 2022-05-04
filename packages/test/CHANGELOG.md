@@ -1,5 +1,11 @@
 # @onia/test
 
+## 0.3.3
+
+### Patch Changes
+
+- 73f5ce2: Bump `@hapi/hoek` to `v10.0.0`.
+
 ## 0.3.2
 
 ### Patch Changes

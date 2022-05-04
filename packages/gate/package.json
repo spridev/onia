@@ -1,7 +1,7 @@
 {
   "name": "@onia/gate",
   "description": "API Gateway Wrapper",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "license": "MIT",
   "repository": "git://github.com/spridev/onia",
   "homepage": "https://github.com/spridev/onia/tree/main/packages/gate",
@@ -16,7 +16,7 @@
     "joi": "^17.0.0"
   },
   "devDependencies": {
-    "@onia/test": "^0.3.0"
+    "@onia/test": "^0.3.3"
   },
   "peerDependencies": {
     "@types/aws-lambda": "^8.0.0"
