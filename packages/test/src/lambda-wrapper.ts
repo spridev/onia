@@ -21,17 +21,14 @@ export class LambdaWrapper<TEvent, TResult> {
    * Create a new lambda wrapper.
    */
   constructor(
-    private $handler: (
-      event: TEvent,
-      context: Context
-    ) => Promise<TResult | undefined>
+    private $handler: (event: TEvent, context: Context) => Promise<TResult>
   ) {}
 
   /**
    * Create a new lambda wrapper from promise.
    */
   static promise<TEvent, TResult>(
-    handler: (event: TEvent, context: Context) => Promise<TResult | undefined>
+    handler: (event: TEvent, context: Context) => Promise<TResult>
   ): LambdaWrapper<TEvent, TResult> {
     return new LambdaWrapper(handler);
   }
@@ -45,7 +42,7 @@ export class LambdaWrapper<TEvent, TResult> {
       context: Context,
       callback: Callback<TResult>
     ) => void
-  ): LambdaWrapper<TEvent, TResult> {
+  ): LambdaWrapper<TEvent, TResult | undefined> {
     return new LambdaWrapper(promisify(handler));
   }
 
@@ -73,7 +70,7 @@ export class LambdaWrapper<TEvent, TResult> {
   async call(
     event: DeepPartial<TEvent> = {},
     context: DeepPartial<Context> = {}
-  ): Promise<TResult | undefined> {
+  ): Promise<TResult> {
     const options = { nullOverride: true };
 
     return this.$handler(
