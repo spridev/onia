@@ -1,5 +1,11 @@
 # @onia/test
 
+## 0.3.4
+
+### Patch Changes
+
+- dee215d: Improve `LambdaWrapper` class typings.
+
 ## 0.3.3
 
 ### Patch Changes
