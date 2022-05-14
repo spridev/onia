@@ -1,5 +1,11 @@
 # @onia/gate
 
+## 0.2.0
+
+### Minor Changes
+
+- c7aff28: Constrain the handler to return structured responses.
+
 ## 0.1.2
 
 ### Patch Changes
