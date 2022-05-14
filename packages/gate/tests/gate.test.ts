@@ -31,13 +31,7 @@ const scopes = test.macro(async function (
     },
   });
 
-  if (typeof result === 'string') {
-    return t.fail();
-  }
-
-  const { statusCode } = result ?? {};
-
-  t.is(statusCode, code);
+  t.is(result.statusCode, code);
 });
 
 function withForm(body: string): DeepPartial<APIGatewayProxyEventV2> {
@@ -275,15 +269,9 @@ test('returns 400 when the payload type is missing', async function (t) {
 
   const result = await wrapper.call({ body: 'onia' });
 
-  if (typeof result === 'string') {
-    return t.fail();
-  }
+  t.is(result.statusCode, 400);
 
-  const { statusCode, body } = result ?? {};
-
-  t.is(statusCode, 400);
-
-  t.true(body?.includes('Missing content-type header'));
+  t.true(result.body?.includes('Missing content-type header'));
 });
 
 test('returns 400 when the payload type is invalid', async function (t) {
@@ -299,15 +287,9 @@ test('returns 400 when the payload type is invalid', async function (t) {
     },
   });
 
-  if (typeof result === 'string') {
-    return t.fail();
-  }
+  t.is(result.statusCode, 400);
 
-  const { statusCode, body } = result ?? {};
-
-  t.is(statusCode, 400);
-
-  t.true(body?.includes('Invalid content-type header'));
+  t.true(result.body?.includes('Invalid content-type header'));
 });
 
 test('returns 415 when the payload type is not supported', async function (t) {
@@ -323,15 +305,9 @@ test('returns 415 when the payload type is not supported', async function (t) {
     },
   });
 
-  if (typeof result === 'string') {
-    return t.fail();
-  }
+  t.is(result.statusCode, 415);
 
-  const { statusCode, body } = result ?? {};
-
-  t.is(statusCode, 415);
-
-  t.true(body?.includes('Unsupported Media Type'));
+  t.true(result.body?.includes('Unsupported Media Type'));
 });
 
 test('returns 400 when the payload type does not match the content', async function (t) {
@@ -347,15 +323,9 @@ test('returns 400 when the payload type does not match the content', async funct
     },
   });
 
-  if (typeof result === 'string') {
-    return t.fail();
-  }
+  t.is(result.statusCode, 400);
 
-  const { statusCode, body } = result ?? {};
-
-  t.is(statusCode, 400);
-
-  t.true(body?.includes('Invalid request body'));
+  t.true(result.body?.includes('Invalid request body'));
 });
 
 test(
@@ -461,13 +431,7 @@ test('returns 200 when the event is valid', async function (t) {
 
   const result = await wrapper.call(withJson({ name: 'onia' }));
 
-  if (typeof result === 'string') {
-    return t.fail();
-  }
-
-  const { statusCode } = result ?? {};
-
-  t.is(statusCode, 200);
+  t.is(result.statusCode, 200);
 });
 
 test('returns 400 when the event is invalid', async function (t) {
@@ -493,13 +457,7 @@ test('returns 400 when the event is invalid', async function (t) {
 
   const result = await wrapper.call(withJson({ name: 'x' }));
 
-  if (typeof result === 'string') {
-    return t.fail();
-  }
-
-  const { statusCode } = result ?? {};
-
-  t.is(statusCode, 400);
+  t.is(result.statusCode, 400);
 });
 
 test('assigns a default value if the event value is undefined', async function (t) {
@@ -525,29 +483,7 @@ test('assigns a default value if the event value is undefined', async function (
 
   const result = await wrapper.call(withJson({ name: undefined }));
 
-  if (typeof result === 'string') {
-    return t.fail();
-  }
-
-  const { statusCode } = result ?? {};
-
-  t.is(statusCode, 200);
-});
-
-test('formats the result from a string', async function (t) {
-  const gate = new Gate();
-
-  const handler = gate.handler(() => 'onia');
-
-  const wrapper = LambdaWrapper.promise(handler).event(withText('onia'));
-
-  const result = await wrapper.call();
-
-  if (typeof result === 'object') {
-    return t.fail();
-  }
-
-  t.is(result, 'onia');
+  t.is(result.statusCode, 200);
 });
 
 test('formats the result from a toolkit', async function (t) {
@@ -559,15 +495,9 @@ test('formats the result from a toolkit', async function (t) {
 
   const result = await wrapper.call();
 
-  if (typeof result === 'string') {
-    return t.fail();
-  }
+  t.is(result.statusCode, 200);
 
-  const { statusCode, body } = result ?? {};
-
-  t.is(statusCode, 200);
-
-  t.is(body, 'onia');
+  t.is(result.body, 'onia');
 });
 
 test('formats the result from a structured object', async function (t) {
@@ -579,15 +509,9 @@ test('formats the result from a structured object', async function (t) {
 
   const result = await wrapper.call();
 
-  if (typeof result === 'string') {
-    return t.fail();
-  }
+  t.is(result.statusCode, 200);
 
-  const { statusCode, body } = result ?? {};
-
-  t.is(statusCode, 200);
-
-  t.is(body, 'onia');
+  t.is(result.body, 'onia');
 });
 
 test('formats the result from a boom error', async function (t) {
@@ -601,15 +525,9 @@ test('formats the result from a boom error', async function (t) {
 
   const result = await wrapper.call();
 
-  if (typeof result === 'string') {
-    return t.fail();
-  }
+  t.is(result.statusCode, 403);
 
-  const { statusCode, body } = result ?? {};
-
-  t.is(statusCode, 403);
-
-  t.true(body?.includes('Custom message'));
+  t.true(result.body?.includes('Custom message'));
 });
 
 test('formats the result from a basic error', async function (t) {
@@ -623,16 +541,10 @@ test('formats the result from a basic error', async function (t) {
 
   const result = await wrapper.call();
 
-  if (typeof result === 'string') {
-    return t.fail();
-  }
+  t.is(result.statusCode, 500);
 
-  const { statusCode, body } = result ?? {};
-
-  t.is(statusCode, 500);
-
-  t.true(body?.includes('An internal server error occurred'));
-  t.false(body?.includes('Custom message'));
+  t.true(result.body?.includes('An internal server error occurred'));
+  t.false(result.body?.includes('Custom message'));
 });
 
 test('formats the result from a string error', async function (t) {
@@ -646,14 +558,8 @@ test('formats the result from a string error', async function (t) {
 
   const result = await wrapper.call();
 
-  if (typeof result === 'string') {
-    return t.fail();
-  }
+  t.is(result.statusCode, 500);
 
-  const { statusCode, body } = result ?? {};
-
-  t.is(statusCode, 500);
-
-  t.true(body?.includes('An internal server error occurred'));
-  t.false(body?.includes('Custom message'));
+  t.true(result.body?.includes('An internal server error occurred'));
+  t.false(result.body?.includes('Custom message'));
 });
