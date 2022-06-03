@@ -3,6 +3,7 @@ import anyTest, { TestFn } from 'ava';
 import {
   AdminCreateUserCommand,
   AdminDeleteUserCommand,
+  AdminGetUserCommand,
   AdminInitiateAuthCommand,
   AdminSetUserPasswordCommand,
   CognitoIdentityProviderClient,
@@ -221,6 +222,102 @@ test('throws when the user refresh token is missing', async function (t) {
   await t.throwsAsync(() => tester.createUser('username', 'password'), {
     message: 'Missing refresh token',
   });
+});
+
+test('returns true when the user exists', async function (t) {
+  const { mock } = t.context;
+
+  mock.on(AdminGetUserCommand).resolves({
+    Username: 'username',
+  });
+
+  const tester = new CognitoTester('user-pool', 'client');
+
+  const matches = await tester.containsUser('username');
+
+  t.is(matches, true);
+});
+
+test('returns true when the user with the given attributes exists', async function (t) {
+  const { mock } = t.context;
+
+  mock.on(AdminGetUserCommand).resolves({
+    Username: 'username',
+    UserAttributes: [
+      { Name: 'name', Value: 'spri' },
+      { Name: 'email', Value: 'spri@onia.dev' },
+    ],
+  });
+
+  const tester = new CognitoTester('user-pool', 'client');
+
+  const matches = await tester.containsUser('username', {
+    email: 'spri@onia.dev',
+  });
+
+  t.is(matches, true);
+});
+
+test('returns false when the user does not exist', async function (t) {
+  const { mock } = t.context;
+
+  mock.on(AdminGetUserCommand).rejects(new Error('💩'));
+
+  const tester = new CognitoTester('user-pool', 'client');
+
+  const matches = await tester.containsUser('username');
+
+  t.is(matches, false);
+});
+
+test('returns false when the user attributes are empty', async function (t) {
+  const { mock } = t.context;
+
+  mock.on(AdminGetUserCommand).resolves({
+    Username: 'username',
+  });
+
+  const tester = new CognitoTester('user-pool', 'client');
+
+  const matches = await tester.containsUser('username', {
+    email: 'spri@onia.dev',
+  });
+
+  t.is(matches, false);
+});
+
+test('returns false when the user has a missing attribute', async function (t) {
+  const { mock } = t.context;
+
+  mock.on(AdminGetUserCommand).resolves({
+    Username: 'username',
+    UserAttributes: [{ Name: 'name', Value: 'spri' }],
+  });
+
+  const tester = new CognitoTester('user-pool', 'client');
+
+  const matches = await tester.containsUser('username', {
+    email: 'spri@onia.dev',
+  });
+
+  t.is(matches, false);
+});
+
+test('returns false when the user has an incorrect attribute', async function (t) {
+  const { mock } = t.context;
+
+  mock.on(AdminGetUserCommand).resolves({
+    Username: 'username',
+    UserAttributes: [{ Name: 'name', Value: 'spri' }],
+  });
+
+  const tester = new CognitoTester('user-pool', 'client');
+
+  const matches = await tester.containsUser('username', {
+    name: 'onia',
+  });
+
+  t.is(matches, false);
 });
 
 test('deletes a user', async function (t) {
