@@ -1,5 +1,11 @@
 # @onia/test
 
+## 0.4.0
+
+### Minor Changes
+
+- 9310f53: Rename `config` method to `populate` in the `SystemStore` class.
+
 ## 0.3.4
 
 ### Patch Changes
