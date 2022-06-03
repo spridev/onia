@@ -16,7 +16,7 @@
     "joi": "^17.0.0"
   },
   "devDependencies": {
-    "@onia/test": "^0.4.0"
+    "@onia/test": "^0.3.0"
   },
   "peerDependencies": {
     "@types/aws-lambda": "^8.0.0"
