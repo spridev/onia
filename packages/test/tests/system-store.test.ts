@@ -38,7 +38,7 @@ test('gets all parameters', async function (t) {
     ],
   });
 
-  const result = await new SystemStore().config<{ A: string; B: string }>();
+  const result = await new SystemStore().populate<{ A: string; B: string }>();
 
   t.deepEqual(result, {
     A: '1',
@@ -65,7 +65,7 @@ test('gets all parameters with path', async function (t) {
     ],
   });
 
-  const result = await new SystemStore('/dev').config();
+  const result = await new SystemStore('/dev').populate();
 
   t.deepEqual(result, {
     A: '1',
@@ -116,7 +116,7 @@ test('gets all parameters in multiple batches', async function (t) {
     ],
   });
 
-  const result = await new SystemStore().config();
+  const result = await new SystemStore().populate();
 
   t.deepEqual(result, {
     A: '1',
@@ -152,7 +152,7 @@ test('formats configuration keys', async function (t) {
     ],
   });
 
-  const result = await new SystemStore('/dev').config();
+  const result = await new SystemStore('/dev').populate();
 
   t.deepEqual(result, {
     API_URL: '1',
@@ -180,7 +180,7 @@ test('formats configuration keys with custom prefix', async function (t) {
     ],
   });
 
-  const result = await new SystemStore('/dev').config('/onia');
+  const result = await new SystemStore('/dev').populate('/onia');
 
   t.deepEqual(result, {
     ONIA_API_URL: '1',
@@ -208,7 +208,7 @@ test('does not override existing environment variables', async function (t) {
 
   process.env.B = 'X';
 
-  const result = await new SystemStore().config();
+  const result = await new SystemStore().populate();
 
   t.deepEqual(result, {
     A: '1',
@@ -232,7 +232,7 @@ test('ignores parameters with empty names', async function (t) {
     Parameters: [{ Value: 'x' }],
   });
 
-  const result = await new SystemStore().config();
+  const result = await new SystemStore().populate();
 
   t.deepEqual(result, {});
 });
@@ -248,7 +248,7 @@ test('ignores parameters with empty values', async function (t) {
     Parameters: [{ Name: '/x' }],
   });
 
-  const result = await new SystemStore().config();
+  const result = await new SystemStore().populate();
 
   t.deepEqual(result, {});
 });
