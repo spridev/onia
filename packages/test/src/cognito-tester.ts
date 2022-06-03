@@ -15,7 +15,7 @@ const client = new CognitoIdentityProviderClient({});
 
 export class CognitoTester {
   /**
-   * The cognito users.
+   * The cognito tester users.
    */
   private $users: Map<CognitoUser['username'], CognitoUser> = new Map();
 
