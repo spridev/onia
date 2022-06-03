@@ -163,6 +163,66 @@ test('creates a user', async function (t) {
   });
 });
 
+test('throws when the user username is missing', async function (t) {
+  const { mock } = t.context;
+
+  mock.on(AdminCreateUserCommand).resolves({ User: {} });
+
+  const tester = new CognitoTester('user-pool', 'client');
+
+  await t.throwsAsync(() => tester.createUser('username', 'password'), {
+    message: 'Missing username',
+  });
+});
+
+test('throws when the user access token is missing', async function (t) {
+  const { mock } = t.context;
+
+  mock.on(AdminCreateUserCommand).resolves({
+    User: {
+      Username: '1234',
+    },
+  });
+
+  mock.on(AdminSetUserPasswordCommand).resolves({});
+
+  mock.on(AdminInitiateAuthCommand).resolves({
+    AuthenticationResult: {
+      RefreshToken: 'refresh-token',
+    },
+  });
+
+  const tester = new CognitoTester('user-pool', 'client');
+
+  await t.throwsAsync(() => tester.createUser('username', 'password'), {
+    message: 'Missing access token',
+  });
+});
+
+test('throws when the user refresh token is missing', async function (t) {
+  const { mock } = t.context;
+
+  mock.on(AdminCreateUserCommand).resolves({
+    User: {
+      Username: '1234',
+    },
+  });
+
+  mock.on(AdminSetUserPasswordCommand).resolves({});
+
+  mock.on(AdminInitiateAuthCommand).resolves({
+    AuthenticationResult: {
+      AccessToken: 'access-token',
+    },
+  });
+
+  const tester = new CognitoTester('user-pool', 'client');
+
+  await t.throwsAsync(() => tester.createUser('username', 'password'), {
+    message: 'Missing refresh token',
+  });
+});
+
 test('deletes a user', async function (t) {
   const { mock } = t.context;
 
