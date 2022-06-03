@@ -1,6 +1,7 @@
 import {
   AdminCreateUserCommand,
   AdminDeleteUserCommand,
+  AdminGetUserCommand,
   AdminInitiateAuthCommand,
   AdminSetUserPasswordCommand,
   CognitoIdentityProviderClient,
@@ -98,6 +99,43 @@ export class CognitoTester {
     this.$users.set(user.username, user);
 
     return user;
+  }
+
+  /**
+   * Determine if a user exists.
+   */
+  async containsUser(
+    username: string,
+    attributes?: Record<string, string>
+  ): Promise<boolean> {
+    try {
+      const result = await client.send(
+        new AdminGetUserCommand({
+          UserPoolId: this.$pool,
+          Username: username,
+        })
+      );
+
+      if (!attributes) {
+        return true;
+      }
+
+      if (!result.UserAttributes) {
+        return false;
+      }
+
+      for (const [name, value] of Object.entries(attributes)) {
+        const attribute = result.UserAttributes.find((a) => a.Name === name);
+
+        if (!attribute || attribute.Value !== value) {
+          return false;
+        }
+      }
+    } catch {
+      return false;
+    }
+
+    return true;
   }
 
   /**
