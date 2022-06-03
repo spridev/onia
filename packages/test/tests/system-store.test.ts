@@ -38,7 +38,7 @@ test('gets all parameters', async function (t) {
     ],
   });
 
-  const result = await new SystemStore().config();
+  const result = await new SystemStore().config<{ A: string; B: string }>();
 
   t.deepEqual(result, {
     A: '1',

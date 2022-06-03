@@ -75,7 +75,7 @@ export class SystemStore {
   /**
    * Populate process.env from parameters.
    */
-  async config(prefix = ''): Promise<Record<string, string>> {
+  async config<T extends Record<string, string>>(prefix = ''): Promise<T> {
     const metadata = await this.metadata();
 
     const parameters = await this.parameters(
@@ -104,6 +104,6 @@ export class SystemStore {
       }
     }
 
-    return output;
+    return output as T;
   }
 }
