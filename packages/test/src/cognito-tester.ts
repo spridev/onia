@@ -1,6 +1,7 @@
 import {
   AdminCreateUserCommand,
   AdminDeleteUserCommand,
+  AdminGetUserCommand,
   AdminInitiateAuthCommand,
   AdminSetUserPasswordCommand,
   CognitoIdentityProviderClient,
@@ -9,18 +10,17 @@ import {
 
 import { CognitoFlow } from './cognito-flow';
 import { CognitoUser } from './cognito-user';
-import { invariant } from './utils/invariant';
 
 const client = new CognitoIdentityProviderClient({});
 
-export class CognitoClient {
+export class CognitoTester {
   /**
-   * The client users.
+   * The cognito tester users.
    */
   private $users: Map<CognitoUser['username'], CognitoUser> = new Map();
 
   /**
-   * Create a new cognito client.
+   * Create a new cognito tester.
    */
   constructor(
     private $pool: string,
@@ -29,14 +29,14 @@ export class CognitoClient {
   ) {}
 
   /**
-   * Set up the cognito client.
+   * Set up the cognito tester.
    */
   async setup(): Promise<void> {
     await this.updateFlows([...this.$flows, 'ALLOW_ADMIN_USER_PASSWORD_AUTH']);
   }
 
   /**
-   * Tear down the cognito client.
+   * Tear down the cognito tester.
    */
   async teardown(): Promise<void> {
     await this.updateFlows(this.$flows);
@@ -55,7 +55,9 @@ export class CognitoClient {
       })
     );
 
-    invariant(createResult?.User?.Username, 'Missing username');
+    if (!createResult?.User?.Username) {
+      throw new Error('Missing username');
+    }
 
     await client.send(
       new AdminSetUserPasswordCommand({
@@ -78,15 +80,13 @@ export class CognitoClient {
       })
     );
 
-    invariant(
-      initiateResult?.AuthenticationResult?.AccessToken,
-      'Missing access token'
-    );
+    if (!initiateResult?.AuthenticationResult?.AccessToken) {
+      throw new Error('Missing access token');
+    }
 
-    invariant(
-      initiateResult?.AuthenticationResult?.RefreshToken,
-      'Missing refresh token'
-    );
+    if (!initiateResult?.AuthenticationResult?.RefreshToken) {
+      throw new Error('Missing refresh token');
+    }
 
     const user: CognitoUser = {
       id: createResult.User.Username,
@@ -99,6 +99,43 @@ export class CognitoClient {
     this.$users.set(user.username, user);
 
     return user;
+  }
+
+  /**
+   * Determine if a user exists.
+   */
+  async containsUser(
+    username: string,
+    attributes?: Record<string, string>
+  ): Promise<boolean> {
+    try {
+      const result = await client.send(
+        new AdminGetUserCommand({
+          UserPoolId: this.$pool,
+          Username: username,
+        })
+      );
+
+      if (!attributes) {
+        return true;
+      }
+
+      if (!result.UserAttributes) {
+        return false;
+      }
+
+      for (const [name, value] of Object.entries(attributes)) {
+        const attribute = result.UserAttributes.find((a) => a.Name === name);
+
+        if (!attribute || attribute.Value !== value) {
+          return false;
+        }
+      }
+    } catch {
+      return false;
+    }
+
+    return true;
   }
 
   /**

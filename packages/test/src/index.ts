@@ -1,6 +1,6 @@
 // Cognito
-export * from './cognito-client';
 export * from './cognito-flow';
+export * from './cognito-tester';
 export * from './cognito-user';
 
 // Lambda
