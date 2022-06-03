@@ -11,7 +11,7 @@ import {
 
 import { ClientMock, ClientType } from '@onia/mock';
 
-import { CognitoClient, CognitoUser } from '../src';
+import { CognitoTester, CognitoUser } from '../src';
 
 interface TestContext {
   mock: ClientType<CognitoIdentityProviderClient>;
@@ -27,14 +27,14 @@ test.afterEach.always(function (t) {
   t.context.mock.restore();
 });
 
-test('sets up the client', async function (t) {
+test('sets up the tester', async function (t) {
   const { mock } = t.context;
 
   mock.on(UpdateUserPoolClientCommand).resolves({});
 
-  const client = new CognitoClient('user-pool', 'client');
+  const tester = new CognitoTester('user-pool', 'client');
 
-  await client.setup();
+  await tester.setup();
 
   t.is(mock.count(), 1);
 
@@ -48,16 +48,16 @@ test('sets up the client', async function (t) {
   });
 });
 
-test('sets up the client with custom flows', async function (t) {
+test('sets up the tester with custom flows', async function (t) {
   const { mock } = t.context;
 
   mock.on(UpdateUserPoolClientCommand).resolves({});
 
-  const client = new CognitoClient('user-pool', 'client', [
+  const tester = new CognitoTester('user-pool', 'client', [
     'ALLOW_USER_PASSWORD_AUTH',
   ]);
 
-  await client.setup();
+  await tester.setup();
 
   t.is(mock.count(), 1);
 
@@ -71,14 +71,14 @@ test('sets up the client with custom flows', async function (t) {
   });
 });
 
-test('tears down the client', async function (t) {
+test('tears down the tester', async function (t) {
   const { mock } = t.context;
 
   mock.on(UpdateUserPoolClientCommand).resolves({});
 
-  const client = new CognitoClient('user-pool', 'client');
+  const tester = new CognitoTester('user-pool', 'client');
 
-  await client.teardown();
+  await tester.teardown();
 
   t.is(mock.count(), 1);
 
@@ -89,16 +89,16 @@ test('tears down the client', async function (t) {
   });
 });
 
-test('tears down the client with custom flows', async function (t) {
+test('tears down the tester with custom flows', async function (t) {
   const { mock } = t.context;
 
   mock.on(UpdateUserPoolClientCommand).resolves({});
 
-  const client = new CognitoClient('user-pool', 'client', [
+  const tester = new CognitoTester('user-pool', 'client', [
     'ALLOW_USER_PASSWORD_AUTH',
   ]);
 
-  await client.teardown();
+  await tester.teardown();
 
   t.is(mock.count(), 1);
 
@@ -127,9 +127,9 @@ test('creates a user', async function (t) {
     },
   });
 
-  const client = new CognitoClient('user-pool', 'client');
+  const tester = new CognitoTester('user-pool', 'client');
 
-  const user = await client.createUser('username', 'password');
+  const user = await tester.createUser('username', 'password');
 
   t.deepEqual(user, {
     id: '1234',
@@ -168,9 +168,9 @@ test('deletes a user', async function (t) {
 
   mock.on(AdminDeleteUserCommand).resolves({});
 
-  const client = new CognitoClient('user-pool', 'client');
+  const tester = new CognitoTester('user-pool', 'client');
 
-  await client.deleteUser('username');
+  await tester.deleteUser('username');
 
   t.is(mock.count(), 1);
 
@@ -182,13 +182,13 @@ test('deletes all users', async function (t) {
 
   mock.on(AdminDeleteUserCommand).resolves({});
 
-  const client = new CognitoClient('user-pool', 'client');
+  const tester = new CognitoTester('user-pool', 'client');
 
-  client['$users'].set('1', { username: '1' } as CognitoUser);
-  client['$users'].set('2', { username: '2' } as CognitoUser);
-  client['$users'].set('3', { username: '3' } as CognitoUser);
+  tester['$users'].set('1', { username: '1' } as CognitoUser);
+  tester['$users'].set('2', { username: '2' } as CognitoUser);
+  tester['$users'].set('3', { username: '3' } as CognitoUser);
 
-  await client.deleteUsers();
+  await tester.deleteUsers();
 
   t.is(mock.count(), 3);
 

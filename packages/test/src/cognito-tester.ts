@@ -12,14 +12,14 @@ import { CognitoUser } from './cognito-user';
 
 const client = new CognitoIdentityProviderClient({});
 
-export class CognitoClient {
+export class CognitoTester {
   /**
-   * The client users.
+   * The cognito users.
    */
   private $users: Map<CognitoUser['username'], CognitoUser> = new Map();
 
   /**
-   * Create a new cognito client.
+   * Create a new cognito tester.
    */
   constructor(
     private $pool: string,
@@ -28,14 +28,14 @@ export class CognitoClient {
   ) {}
 
   /**
-   * Set up the cognito client.
+   * Set up the cognito tester.
    */
   async setup(): Promise<void> {
     await this.updateFlows([...this.$flows, 'ALLOW_ADMIN_USER_PASSWORD_AUTH']);
   }
 
   /**
-   * Tear down the cognito client.
+   * Tear down the cognito tester.
    */
   async teardown(): Promise<void> {
     await this.updateFlows(this.$flows);
