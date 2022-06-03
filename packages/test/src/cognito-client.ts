@@ -9,7 +9,6 @@ import {
 
 import { CognitoFlow } from './cognito-flow';
 import { CognitoUser } from './cognito-user';
-import { invariant } from './utils/invariant';
 
 const client = new CognitoIdentityProviderClient({});
 
@@ -55,7 +54,9 @@ export class CognitoClient {
       })
     );
 
-    invariant(createResult?.User?.Username, 'Missing username');
+    if (!createResult?.User?.Username) {
+      throw new Error('Missing username');
+    }
 
     await client.send(
       new AdminSetUserPasswordCommand({
@@ -78,15 +79,13 @@ export class CognitoClient {
       })
     );
 
-    invariant(
-      initiateResult?.AuthenticationResult?.AccessToken,
-      'Missing access token'
-    );
+    if (!initiateResult?.AuthenticationResult?.AccessToken) {
+      throw new Error('Missing access token');
+    }
 
-    invariant(
-      initiateResult?.AuthenticationResult?.RefreshToken,
-      'Missing refresh token'
-    );
+    if (!initiateResult?.AuthenticationResult?.RefreshToken) {
+      throw new Error('Missing refresh token');
+    }
 
     const user: CognitoUser = {
       id: createResult.User.Username,
