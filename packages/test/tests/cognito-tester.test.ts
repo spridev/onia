@@ -236,6 +236,13 @@ test('returns true when the user exists', async function (t) {
   const matches = await tester.containsUser('username');
 
   t.is(matches, true);
+
+  t.is(mock.count(), 1);
+
+  t.like(mock.call(0), {
+    UserPoolId: 'user-pool',
+    Username: 'username',
+  });
 });
 
 test('returns true when the user with the given attributes exists', async function (t) {
@@ -268,6 +275,13 @@ test('returns false when the user does not exist', async function (t) {
   const matches = await tester.containsUser('username');
 
   t.is(matches, false);
+
+  t.is(mock.count(), 1);
+
+  t.like(mock.call(0), {
+    UserPoolId: 'user-pool',
+    Username: 'username',
+  });
 });
 
 test('returns false when the user attributes are empty', async function (t) {
