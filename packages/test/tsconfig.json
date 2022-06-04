@@ -1,11 +1,11 @@
 {
   "compilerOptions": {
     "strict": true,
-    "declaration": true,
-    "lib": ["es2020"],
+    "outDir": "build",
     "target": "es2020",
     "module": "commonjs",
-    "outDir": "build"
+    "lib": ["es2020", "dom"],
+    "declaration": true
   },
   "include": [
     "src/**/*"
