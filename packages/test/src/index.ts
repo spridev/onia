@@ -3,6 +3,9 @@ export * from './cognito-flow';
 export * from './cognito-tester';
 export * from './cognito-user';
 
+// DynamoDB
+export * from './dynamo/table';
+
 // Lambda
 export * from './lambda-wrapper';
 
