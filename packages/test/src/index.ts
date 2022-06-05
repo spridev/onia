@@ -1,7 +1,7 @@
 // Cognito
-export * from './cognito-flow';
-export * from './cognito-tester';
-export * from './cognito-user';
+export * from './cognito/flow';
+export * from './cognito/pool';
+export * from './cognito/user';
 
 // DynamoDB
 export * from './dynamo/table';
