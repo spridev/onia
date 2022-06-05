@@ -95,7 +95,7 @@ export class DynamoTable {
 
       const output = await client.send(new ScanCommand(input));
 
-      if (!output?.Items) {
+      if (!output?.Items || output.Items.length === 0) {
         break;
       }
 
