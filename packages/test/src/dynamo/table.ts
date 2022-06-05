@@ -76,14 +76,16 @@ export class DynamoTable {
       throw new Error('Missing table key schema');
     }
 
-    const tableKeys = output.Table.KeySchema.map((key) => key.AttributeName);
+    const tableKeys = output.Table.KeySchema.map((key) =>
+      String(key.AttributeName)
+    );
 
     let nextKeys: Record<string, AttributeValue> | undefined;
 
     do {
       const input: ScanCommandInput = {
         TableName: this.$table,
-        AttributesToGet: tableKeys as string[],
+        AttributesToGet: tableKeys,
         Limit: DynamoTable.SCAN_LIMIT,
       };
 
