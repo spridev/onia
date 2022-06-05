@@ -7,12 +7,18 @@ import {
   GetItemCommand,
   PutItemCommand,
   ScanCommand,
+  ScanCommandInput,
 } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 
 const client = new DynamoDBClient({});
 
 export class DynamoTable {
+  /**
+   * The maximum number of items to scan.
+   */
+  private static readonly SCAN_LIMIT = 25;
+
   /**
    * Create a new dynamo table.
    */
@@ -60,48 +66,49 @@ export class DynamoTable {
    * Delete all items.
    */
   async deleteItems(): Promise<void> {
-    const describeResult = await client.send(
+    const output = await client.send(
       new DescribeTableCommand({
         TableName: this.$table,
       })
     );
 
-    if (!describeResult?.Table?.KeySchema) {
+    if (!output?.Table?.KeySchema) {
       throw new Error('Missing table key schema');
     }
 
-    let lastKeys: Record<string, AttributeValue> | undefined;
+    const tableKeys = output.Table.KeySchema.map((key) => key.AttributeName);
 
-    const tableKeys = describeResult.Table.KeySchema.map(
-      (key) => key.AttributeName
-    ) as string[];
+    let nextKeys: Record<string, AttributeValue> | undefined;
 
     do {
-      const scanResult = await client.send(
-        new ScanCommand({
-          TableName: this.$table,
-          AttributesToGet: tableKeys,
-          ExclusiveStartKey: lastKeys,
-          Limit: 25,
-        })
-      );
+      const input: ScanCommandInput = {
+        TableName: this.$table,
+        AttributesToGet: tableKeys as string[],
+        Limit: DynamoTable.SCAN_LIMIT,
+      };
 
-      if (!scanResult?.Items) {
+      if (nextKeys) {
+        input.ExclusiveStartKey = nextKeys;
+      }
+
+      const output = await client.send(new ScanCommand(input));
+
+      if (!output?.Items) {
         break;
       }
 
       await client.send(
         new BatchWriteItemCommand({
           RequestItems: {
-            [this.$table]: scanResult.Items.map((key) => ({
+            [this.$table]: output.Items.map((key) => ({
               DeleteRequest: { Key: key },
             })),
           },
         })
       );
 
-      lastKeys = scanResult.LastEvaluatedKey;
-    } while (lastKeys);
+      nextKeys = output.LastEvaluatedKey;
+    } while (nextKeys);
   }
 
   /**
@@ -112,14 +119,14 @@ export class DynamoTable {
     attributes?: Record<string, string>
   ): Promise<boolean> {
     try {
-      const result = await client.send(
+      const output = await client.send(
         new GetItemCommand({
           TableName: this.$table,
           Key: marshall(keys),
         })
       );
 
-      if (!result?.Item) {
+      if (!output?.Item) {
         return false;
       }
 
@@ -127,7 +134,7 @@ export class DynamoTable {
         return true;
       }
 
-      const item = unmarshall(result.Item);
+      const item = unmarshall(output.Item);
 
       for (const [name, value] of Object.entries(attributes)) {
         const attribute = item[name];
