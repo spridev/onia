@@ -60,6 +60,16 @@ export class EventBridgeBus {
   private queueUrl: string | undefined;
 
   /**
+   * Create and set up a new event bridge bus.
+   */
+  static async init(name: string): Promise<EventBridgeBus> {
+    const bus = new EventBridgeBus(name);
+    await bus.setup();
+
+    return bus;
+  }
+
+  /**
    * Create a new event bridge bus.
    */
   constructor(private $name: string) {

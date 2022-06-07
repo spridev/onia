@@ -20,6 +20,16 @@ export class DynamoTable {
   private static readonly SCAN_LIMIT = 25;
 
   /**
+   * Create and set up a new dynamo table.
+   */
+  static async init(name: string): Promise<DynamoTable> {
+    const table = new DynamoTable(name);
+    await table.setup();
+
+    return table;
+  }
+
+  /**
    * Create a new dynamo table.
    */
   constructor(private $name: string) {}
