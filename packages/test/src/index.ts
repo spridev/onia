@@ -6,6 +6,10 @@ export * from './cognito/user';
 // DynamoDB
 export * from './dynamo/table';
 
+// EventBridge
+export * from './event-bridge/bus';
+export * from './event-bridge/event';
+
 // Lambda
 export * from './lambda-wrapper';
 
