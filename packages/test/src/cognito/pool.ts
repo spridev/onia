@@ -22,6 +22,20 @@ export class CognitoPool {
   private static readonly LIST_LIMIT = 60;
 
   /**
+   * Create and set up a new cognito pool.
+   */
+  static async init(
+    id: string,
+    client: string,
+    flows?: CognitoFlow[]
+  ): Promise<CognitoPool> {
+    const pool = new CognitoPool(id, client, flows);
+    await pool.setup();
+
+    return pool;
+  }
+
+  /**
    * Create a new cognito pool.
    */
   constructor(
