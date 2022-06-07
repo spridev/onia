@@ -13,9 +13,12 @@
   "dependencies": {
     "@aws-sdk/client-cognito-identity-provider": "^3.0.0",
     "@aws-sdk/client-dynamodb": "^3.0.0",
+    "@aws-sdk/client-eventbridge": "^3.0.0",
+    "@aws-sdk/client-sqs": "^3.0.0",
     "@aws-sdk/client-ssm": "^3.0.0",
     "@aws-sdk/util-dynamodb": "^3.0.0",
-    "@hapi/hoek": "^10.0.0"
+    "@hapi/hoek": "^10.0.0",
+    "nanoid": "^3.0.0"
   },
   "devDependencies": {
     "@onia/mock": "^0.2.0"
