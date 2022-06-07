@@ -25,7 +25,7 @@ export class CognitoPool {
    * Create a new cognito pool.
    */
   constructor(
-    private $pool: string,
+    private $id: string,
     private $client: string,
     private $flows: CognitoFlow[] = ['ALLOW_REFRESH_TOKEN_AUTH']
   ) {}
@@ -51,7 +51,7 @@ export class CognitoPool {
   async updateFlows(flows: CognitoFlow[]): Promise<void> {
     await client.send(
       new UpdateUserPoolClientCommand({
-        UserPoolId: this.$pool,
+        UserPoolId: this.$id,
         ClientId: this.$client,
         ExplicitAuthFlows: flows,
       })
@@ -64,7 +64,7 @@ export class CognitoPool {
   async createUser(username: string, password: string): Promise<CognitoUser> {
     const createOutput = await client.send(
       new AdminCreateUserCommand({
-        UserPoolId: this.$pool,
+        UserPoolId: this.$id,
         Username: username,
         MessageAction: 'SUPPRESS',
       })
@@ -76,7 +76,7 @@ export class CognitoPool {
 
     await client.send(
       new AdminSetUserPasswordCommand({
-        UserPoolId: this.$pool,
+        UserPoolId: this.$id,
         Username: username,
         Password: password,
         Permanent: true,
@@ -85,7 +85,7 @@ export class CognitoPool {
 
     const initiateOutput = await client.send(
       new AdminInitiateAuthCommand({
-        UserPoolId: this.$pool,
+        UserPoolId: this.$id,
         ClientId: this.$client,
         AuthFlow: 'ADMIN_USER_PASSWORD_AUTH',
         AuthParameters: {
@@ -118,7 +118,7 @@ export class CognitoPool {
   async deleteUser(username: string): Promise<void> {
     await client.send(
       new AdminDeleteUserCommand({
-        UserPoolId: this.$pool,
+        UserPoolId: this.$id,
         Username: username,
       })
     );
@@ -132,7 +132,7 @@ export class CognitoPool {
 
     do {
       const input: ListUsersCommandInput = {
-        UserPoolId: this.$pool,
+        UserPoolId: this.$id,
         Limit: CognitoPool.LIST_LIMIT,
       };
 
@@ -166,7 +166,7 @@ export class CognitoPool {
     try {
       const output = await client.send(
         new AdminGetUserCommand({
-          UserPoolId: this.$pool,
+          UserPoolId: this.$id,
           Username: username,
         })
       );

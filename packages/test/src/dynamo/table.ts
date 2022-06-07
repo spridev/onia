@@ -22,7 +22,7 @@ export class DynamoTable {
   /**
    * Create a new dynamo table.
    */
-  constructor(private $table: string) {}
+  constructor(private $name: string) {}
 
   /**
    * Set up the dynamo table.
@@ -44,7 +44,7 @@ export class DynamoTable {
   async createItem(attributes: Record<string, string>): Promise<void> {
     await client.send(
       new PutItemCommand({
-        TableName: this.$table,
+        TableName: this.$name,
         Item: marshall(attributes),
       })
     );
@@ -56,7 +56,7 @@ export class DynamoTable {
   async deleteItem(keys: Record<string, string>): Promise<void> {
     await client.send(
       new DeleteItemCommand({
-        TableName: this.$table,
+        TableName: this.$name,
         Key: marshall(keys),
       })
     );
@@ -68,7 +68,7 @@ export class DynamoTable {
   async deleteItems(): Promise<void> {
     const output = await client.send(
       new DescribeTableCommand({
-        TableName: this.$table,
+        TableName: this.$name,
       })
     );
 
@@ -84,7 +84,7 @@ export class DynamoTable {
 
     do {
       const input: ScanCommandInput = {
-        TableName: this.$table,
+        TableName: this.$name,
         AttributesToGet: tableKeys,
         Limit: DynamoTable.SCAN_LIMIT,
       };
@@ -102,7 +102,7 @@ export class DynamoTable {
       await client.send(
         new BatchWriteItemCommand({
           RequestItems: {
-            [this.$table]: output.Items.map((key) => ({
+            [this.$name]: output.Items.map((key) => ({
               DeleteRequest: { Key: key },
             })),
           },
@@ -123,7 +123,7 @@ export class DynamoTable {
     try {
       const output = await client.send(
         new GetItemCommand({
-          TableName: this.$table,
+          TableName: this.$name,
           Key: marshall(keys),
         })
       );
