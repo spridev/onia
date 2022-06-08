@@ -1,6 +1,6 @@
 import test, { ExecutionContext } from 'ava';
 
-import { DeepPartial, LambdaWrapper } from '@onia/test';
+import { DeepPartial, LambdaWrapper } from '@onia/labo';
 
 import * as Boom from '@hapi/boom';
 import * as Joi from 'joi';
