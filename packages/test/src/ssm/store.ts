@@ -6,9 +6,11 @@ import {
   DescribeParametersCommandInput,
 } from '@aws-sdk/client-ssm';
 
+import { Hooks } from '../hooks';
+
 const client = new SSMClient({});
 
-export class SSMStore {
+export class SSMStore implements Hooks {
   /**
    * The maximum number of parameters to get.
    */
@@ -90,6 +92,13 @@ export class SSMStore {
 
       nextToken = output.NextToken;
     } while (nextToken);
+  }
+
+  /**
+   * Clean up the ssm store.
+   */
+  async cleanup(): Promise<void> {
+    //
   }
 
   /**

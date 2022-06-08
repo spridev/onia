@@ -11,9 +11,11 @@ import {
 } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 
+import { Hooks } from '../hooks';
+
 const client = new DynamoDBClient({});
 
-export class DynamoTable {
+export class DynamoTable implements Hooks {
   /**
    * The maximum number of items to scan.
    */
@@ -39,6 +41,13 @@ export class DynamoTable {
    */
   async setup(): Promise<void> {
     //
+  }
+
+  /**
+   * Clean up the dynamo table.
+   */
+  async cleanup(): Promise<void> {
+    await this.deleteItems();
   }
 
   /**

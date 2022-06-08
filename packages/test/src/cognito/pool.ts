@@ -10,12 +10,14 @@ import {
   UpdateUserPoolClientCommand,
 } from '@aws-sdk/client-cognito-identity-provider';
 
+import { Hooks } from '../hooks';
+
 import { CognitoFlow } from './flow';
 import { CognitoUser } from './user';
 
 const client = new CognitoIdentityProviderClient({});
 
-export class CognitoPool {
+export class CognitoPool implements Hooks {
   /**
    * The maximum number of users to list.
    */
@@ -49,6 +51,13 @@ export class CognitoPool {
    */
   async setup(): Promise<void> {
     await this.updateFlows([...this.$flows, 'ALLOW_ADMIN_USER_PASSWORD_AUTH']);
+  }
+
+  /**
+   * Clean up the cognito pool.
+   */
+  async cleanup(): Promise<void> {
+    await this.deleteUsers();
   }
 
   /**

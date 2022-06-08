@@ -18,12 +18,14 @@ import {
 
 import { nanoid } from 'nanoid';
 
+import { Hooks } from '../hooks';
+
 import { EventBridgeEvent } from './event';
 
 const ebc = new EventBridgeClient({});
 const sqs = new SQSClient({});
 
-export class EventBridgeBus {
+export class EventBridgeBus implements Hooks {
   /**
    * The maximum number of messages to receive.
    */
@@ -141,6 +143,13 @@ export class EventBridgeBus {
         },
       })
     );
+  }
+
+  /**
+   * Clean up the event bridge bus.
+   */
+  async cleanup(): Promise<void> {
+    await this.deleteEvents();
   }
 
   /**
