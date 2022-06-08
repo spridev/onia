@@ -2,7 +2,7 @@ import { promisify } from 'node:util';
 
 import * as Hoek from '@hapi/hoek';
 
-import { DeepPartial } from './types/deep-partial';
+import { DeepPartial } from '../types/deep-partial';
 
 import type { Callback, Context } from 'aws-lambda';
 

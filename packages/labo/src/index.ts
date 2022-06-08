@@ -11,7 +11,7 @@ export * from './event-bridge/bus';
 export * from './event-bridge/event';
 
 // Lambda
-export * from './lambda-wrapper';
+export * from './lambda/wrapper';
 
 // SSM
 export * from './ssm/store';

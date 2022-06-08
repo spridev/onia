@@ -1,10 +1,10 @@
 {
-  "name": "@onia/test",
+  "name": "@onia/labo",
   "description": "AWS Testing Toolbox",
-  "version": "0.4.0",
+  "version": "0.0.0",
   "license": "MIT",
   "repository": "git://github.com/spridev/onia",
-  "homepage": "https://github.com/spridev/onia/tree/main/packages/test",
+  "homepage": "https://github.com/spridev/onia/tree/main/packages/labo",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "files": [

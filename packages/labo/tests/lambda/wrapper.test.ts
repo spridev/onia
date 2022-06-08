@@ -1,6 +1,6 @@
 import test from 'ava';
 
-import { LambdaWrapper } from '../src';
+import { LambdaWrapper } from '../../src';
 
 import type {
   APIGatewayProxyEventV2,
