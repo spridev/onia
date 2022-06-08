@@ -13,8 +13,8 @@ export * from './event-bridge/event';
 // Lambda
 export * from './lambda-wrapper';
 
-// System
-export * from './system-store';
+// SSM
+export * from './ssm/store';
 
 // Types
 export * from './types/deep-partial';
