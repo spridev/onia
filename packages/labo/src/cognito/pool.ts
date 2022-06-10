@@ -15,7 +15,7 @@ import { Hooks } from '../hooks';
 import { CognitoFlow } from './flow';
 import { CognitoUser } from './user';
 
-const client = new CognitoIdentityProviderClient({});
+const cip = new CognitoIdentityProviderClient({});
 
 export class CognitoPool implements Hooks {
   /**
@@ -72,7 +72,7 @@ export class CognitoPool implements Hooks {
    * Update the authentication flows.
    */
   async updateFlows(flows: CognitoFlow[]): Promise<void> {
-    await client.send(
+    await cip.send(
       new UpdateUserPoolClientCommand({
         UserPoolId: this.$id,
         ClientId: this.$client,
@@ -85,7 +85,7 @@ export class CognitoPool implements Hooks {
    * Create a user.
    */
   async createUser(username: string, password: string): Promise<CognitoUser> {
-    const createOutput = await client.send(
+    const createOutput = await cip.send(
       new AdminCreateUserCommand({
         UserPoolId: this.$id,
         Username: username,
@@ -97,7 +97,7 @@ export class CognitoPool implements Hooks {
       throw new Error('Missing username');
     }
 
-    await client.send(
+    await cip.send(
       new AdminSetUserPasswordCommand({
         UserPoolId: this.$id,
         Username: username,
@@ -106,7 +106,7 @@ export class CognitoPool implements Hooks {
       })
     );
 
-    const initiateOutput = await client.send(
+    const initiateOutput = await cip.send(
       new AdminInitiateAuthCommand({
         UserPoolId: this.$id,
         ClientId: this.$client,
@@ -139,7 +139,7 @@ export class CognitoPool implements Hooks {
    * Delete a user.
    */
   async deleteUser(username: string): Promise<void> {
-    await client.send(
+    await cip.send(
       new AdminDeleteUserCommand({
         UserPoolId: this.$id,
         Username: username,
@@ -163,7 +163,7 @@ export class CognitoPool implements Hooks {
         input.PaginationToken = nextToken;
       }
 
-      const output = await client.send(new ListUsersCommand(input));
+      const output = await cip.send(new ListUsersCommand(input));
 
       if (!output?.Users) {
         break;
@@ -187,7 +187,7 @@ export class CognitoPool implements Hooks {
     attributes?: Record<string, string>
   ): Promise<boolean> {
     try {
-      const output = await client.send(
+      const output = await cip.send(
         new AdminGetUserCommand({
           UserPoolId: this.$id,
           Username: username,

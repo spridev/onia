@@ -13,7 +13,7 @@ import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 
 import { Hooks } from '../hooks';
 
-const client = new DynamoDBClient({});
+const ddb = new DynamoDBClient({});
 
 export class DynamoTable implements Hooks {
   /**
@@ -61,7 +61,7 @@ export class DynamoTable implements Hooks {
    * Create an item.
    */
   async createItem(attributes: Record<string, string>): Promise<void> {
-    await client.send(
+    await ddb.send(
       new PutItemCommand({
         TableName: this.$name,
         Item: marshall(attributes),
@@ -73,7 +73,7 @@ export class DynamoTable implements Hooks {
    * Delete an item.
    */
   async deleteItem(keys: Record<string, string>): Promise<void> {
-    await client.send(
+    await ddb.send(
       new DeleteItemCommand({
         TableName: this.$name,
         Key: marshall(keys),
@@ -85,7 +85,7 @@ export class DynamoTable implements Hooks {
    * Delete all items.
    */
   async deleteItems(): Promise<void> {
-    const output = await client.send(
+    const output = await ddb.send(
       new DescribeTableCommand({
         TableName: this.$name,
       })
@@ -112,13 +112,13 @@ export class DynamoTable implements Hooks {
         input.ExclusiveStartKey = nextKeys;
       }
 
-      const output = await client.send(new ScanCommand(input));
+      const output = await ddb.send(new ScanCommand(input));
 
       if (!output?.Items || output.Items.length === 0) {
         break;
       }
 
-      await client.send(
+      await ddb.send(
         new BatchWriteItemCommand({
           RequestItems: {
             [this.$name]: output.Items.map((key) => ({
@@ -140,7 +140,7 @@ export class DynamoTable implements Hooks {
     attributes?: Record<string, string>
   ): Promise<boolean> {
     try {
-      const output = await client.send(
+      const output = await ddb.send(
         new GetItemCommand({
           TableName: this.$name,
           Key: marshall(keys),

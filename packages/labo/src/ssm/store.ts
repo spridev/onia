@@ -8,7 +8,7 @@ import {
 
 import { Hooks } from '../hooks';
 
-const client = new SSMClient({});
+const ssm = new SSMClient({});
 
 export class SSMStore implements Hooks {
   /**
@@ -57,7 +57,7 @@ export class SSMStore implements Hooks {
         input.NextToken = nextToken;
       }
 
-      const output = await client.send(new DescribeParametersCommand(input));
+      const output = await ssm.send(new DescribeParametersCommand(input));
 
       if (!output?.Parameters) {
         throw new Error('Missing parameters');
@@ -68,7 +68,7 @@ export class SSMStore implements Hooks {
       );
 
       for (let index = 0; index < names.length; index += SSMStore.GET_LIMIT) {
-        const output = await client.send(
+        const output = await ssm.send(
           new GetParametersCommand({
             Names: names.slice(index, index + SSMStore.GET_LIMIT),
             WithDecryption: this.$decryption,
