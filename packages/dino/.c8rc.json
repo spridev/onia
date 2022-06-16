@@ -1,0 +1,9 @@
+{
+  "include": [
+    "src/**/*.ts"
+  ],
+  "reporter": [
+    "html",
+    "text"
+  ]
+}
