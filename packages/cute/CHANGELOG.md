@@ -1,5 +1,11 @@
 # @onia/cute
 
+## 0.2.0
+
+### Minor Changes
+
+- 0691d9f: Bump `eslint-import-resolver-typescript` to `v3.0.0`.
+
 ## 0.1.2
 
 ### Patch Changes
