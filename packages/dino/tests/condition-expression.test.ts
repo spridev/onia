@@ -2,6 +2,7 @@ import test from 'ava';
 
 import {
   AttributePath,
+  Condition,
   ConditionExpression,
   ExpressionAttributes,
   FunctionExpression,
@@ -349,4 +350,16 @@ test('serializes condition expressions with nested functions', function (t) {
 
   t.deepEqual(attributes.names, { '#name0': 'onia' });
   t.deepEqual(attributes.values, { ':value1': { S: 'S' } });
+});
+
+test('throws when a condition type is invalid', function (t) {
+  const attributes = new ExpressionAttributes();
+
+  const unknown = { type: 'Unknown' } as unknown as Condition;
+
+  const expression = new ConditionExpression(unknown);
+
+  t.throws(() => expression.serialize(attributes), {
+    message: 'Unknown condition type',
+  });
 });

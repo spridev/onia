@@ -189,6 +189,8 @@ export class ConditionExpression implements Expression {
           .map((c) => `(${this.serializeConditionExpression(c, attributes)})`)
           .join(` ${condition.type.toUpperCase()} `);
     }
+
+    throw new Error('Unknown condition type');
   }
 
   /**
