@@ -39,27 +39,27 @@ export class EventBridgeBus implements Hooks {
   /**
    * The name of the event bridge rule.
    */
-  private readonly ruleName: string;
+  private readonly $ruleName: string;
 
   /**
    * The target of the event bridge rule.
    */
-  private readonly ruleTarget: string;
+  private readonly $ruleTarget: string;
 
   /**
    * The name of the sqs queue.
    */
-  private readonly queueName: string;
+  private readonly $queueName: string;
 
   /**
    * The arn of the sqs queue.
    */
-  private queueArn: string | undefined;
+  private $queueArn: string | undefined;
 
   /**
    * The url of the sqs queue.
    */
-  private queueUrl: string | undefined;
+  private $queueUrl: string | undefined;
 
   /**
    * Create and set up a new event bridge bus.
@@ -77,9 +77,9 @@ export class EventBridgeBus implements Hooks {
   constructor(private $name: string) {
     const id = nanoid();
 
-    this.ruleName = `${$name}-test-rule-${id}`;
-    this.ruleTarget = `${$name}-test-target-${id}`;
-    this.queueName = `${$name}-test-queue-${id}`;
+    this.$ruleName = `${$name}-test-rule-${id}`;
+    this.$ruleTarget = `${$name}-test-target-${id}`;
+    this.$queueName = `${$name}-test-queue-${id}`;
   }
 
   /**
@@ -88,7 +88,7 @@ export class EventBridgeBus implements Hooks {
   async setup(): Promise<void> {
     const output = await sqs.send(
       new CreateQueueCommand({
-        QueueName: this.queueName,
+        QueueName: this.$queueName,
       })
     );
 
@@ -96,18 +96,18 @@ export class EventBridgeBus implements Hooks {
       throw new Error('Missing queue url');
     }
 
-    this.queueUrl = output.QueueUrl;
+    this.$queueUrl = output.QueueUrl;
 
-    const region = this.queueUrl.split('.')[1];
-    const account = this.queueUrl.split('/')[3];
+    const region = this.$queueUrl.split('.')[1];
+    const account = this.$queueUrl.split('/')[3];
 
-    this.queueArn = `arn:aws:sqs:${region}:${account}:${this.queueName}`;
+    this.$queueArn = `arn:aws:sqs:${region}:${account}:${this.$queueName}`;
 
     const pattern = { account: [account] };
 
     await ebc.send(
       new PutRuleCommand({
-        Name: this.ruleName,
+        Name: this.$ruleName,
         EventBusName: this.$name,
         EventPattern: JSON.stringify(pattern),
       })
@@ -115,9 +115,9 @@ export class EventBridgeBus implements Hooks {
 
     await ebc.send(
       new PutTargetsCommand({
-        Rule: this.ruleName,
+        Rule: this.$ruleName,
         EventBusName: this.$name,
-        Targets: [{ Id: this.ruleTarget, Arn: this.queueArn }],
+        Targets: [{ Id: this.$ruleTarget, Arn: this.$queueArn }],
       })
     );
 
@@ -127,7 +127,7 @@ export class EventBridgeBus implements Hooks {
         {
           Effect: 'Allow',
           Action: 'SQS:SendMessage',
-          Resource: this.queueArn,
+          Resource: this.$queueArn,
           Principal: {
             Service: 'events.amazonaws.com',
           },
@@ -137,7 +137,7 @@ export class EventBridgeBus implements Hooks {
 
     await sqs.send(
       new SetQueueAttributesCommand({
-        QueueUrl: this.queueUrl,
+        QueueUrl: this.$queueUrl,
         Attributes: {
           Policy: JSON.stringify(policy),
         },
@@ -158,22 +158,22 @@ export class EventBridgeBus implements Hooks {
   async teardown(): Promise<void> {
     await ebc.send(
       new RemoveTargetsCommand({
-        Ids: [this.ruleTarget],
-        Rule: this.ruleName,
+        Ids: [this.$ruleTarget],
+        Rule: this.$ruleName,
         EventBusName: this.$name,
       })
     );
 
     await ebc.send(
       new DeleteRuleCommand({
-        Name: this.ruleName,
+        Name: this.$ruleName,
         EventBusName: this.$name,
       })
     );
 
     await sqs.send(
       new DeleteQueueCommand({
-        QueueUrl: this.queueUrl,
+        QueueUrl: this.$queueUrl,
       })
     );
   }
@@ -209,7 +209,7 @@ export class EventBridgeBus implements Hooks {
     while (true) {
       const output = await sqs.send(
         new ReceiveMessageCommand({
-          QueueUrl: this.queueUrl,
+          QueueUrl: this.$queueUrl,
           MaxNumberOfMessages: EventBridgeBus.RECEIVE_LIMIT,
           WaitTimeSeconds: EventBridgeBus.RECEIVE_WAIT_TIME,
         })
@@ -221,7 +221,7 @@ export class EventBridgeBus implements Hooks {
 
       await sqs.send(
         new DeleteMessageBatchCommand({
-          QueueUrl: this.queueUrl,
+          QueueUrl: this.$queueUrl,
           Entries: output.Messages.map((message) => ({
             Id: message.MessageId,
             ReceiptHandle: message.ReceiptHandle,
@@ -254,7 +254,7 @@ export class EventBridgeBus implements Hooks {
   async purgeEvents(): Promise<void> {
     await sqs.send(
       new PurgeQueueCommand({
-        QueueUrl: this.queueUrl,
+        QueueUrl: this.$queueUrl,
       })
     );
   }
@@ -266,7 +266,7 @@ export class EventBridgeBus implements Hooks {
     while (true) {
       const output = await sqs.send(
         new ReceiveMessageCommand({
-          QueueUrl: this.queueUrl,
+          QueueUrl: this.$queueUrl,
           MaxNumberOfMessages: EventBridgeBus.RECEIVE_LIMIT,
           WaitTimeSeconds: EventBridgeBus.RECEIVE_WAIT_TIME,
         })
@@ -278,7 +278,7 @@ export class EventBridgeBus implements Hooks {
 
       await sqs.send(
         new DeleteMessageBatchCommand({
-          QueueUrl: this.queueUrl,
+          QueueUrl: this.$queueUrl,
           Entries: output.Messages.map((message) => ({
             Id: message.MessageId,
             ReceiptHandle: message.ReceiptHandle,

@@ -138,7 +138,7 @@ export class Gate<T> {
   /**
    * The authorization scopes.
    */
-  private readonly scopes: Record<string, string[]> = {
+  private readonly $scopes: Record<string, string[]> = {
     required: [],
     forbidden: [],
     selection: [],
@@ -153,11 +153,11 @@ export class Gate<T> {
         const [prefix] = value;
 
         if (prefix === '+') {
-          this.scopes.required.push(value.slice(1));
+          this.$scopes.required.push(value.slice(1));
         } else if (prefix === '!') {
-          this.scopes.forbidden.push(value.slice(1));
+          this.$scopes.forbidden.push(value.slice(1));
         } else {
-          this.scopes.selection.push(value);
+          this.$scopes.selection.push(value);
         }
       }
     }
@@ -187,20 +187,20 @@ export class Gate<T> {
   private authorize(event: GateEvent<T>): void {
     const scopes = event.auth.scopes ?? [];
 
-    for (const value of this.scopes.required) {
+    for (const value of this.$scopes.required) {
       if (!scopes.includes(value)) {
         throw Boom.forbidden();
       }
     }
 
-    for (const value of this.scopes.forbidden) {
+    for (const value of this.$scopes.forbidden) {
       if (scopes.includes(value)) {
         throw Boom.forbidden();
       }
     }
 
-    if (this.scopes.selection.length > 0) {
-      const intersection = Hoek.intersect(this.scopes.selection, scopes);
+    if (this.$scopes.selection.length > 0) {
+      const intersection = Hoek.intersect(this.$scopes.selection, scopes);
 
       if (intersection.length === 0) {
         throw Boom.forbidden();

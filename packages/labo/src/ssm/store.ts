@@ -19,7 +19,7 @@ export class SSMStore implements Hooks {
   /**
    * The ssm parameters.
    */
-  private parameters: Record<string, string> = {};
+  private $parameters: Record<string, string> = {};
 
   /**
    * Create and set up a new ssm store.
@@ -86,7 +86,7 @@ export class SSMStore implements Hooks {
 
           const name = parameter.Name.slice(this.$path.length);
 
-          this.parameters[name] = parameter.Value;
+          this.$parameters[name] = parameter.Value;
         }
       }
 
@@ -112,17 +112,17 @@ export class SSMStore implements Hooks {
    * Get a parameter.
    */
   getParameter(path: string): string {
-    if (!this.parameters[path]) {
+    if (!this.$parameters[path]) {
       throw new Error('Missing parameter');
     }
 
-    return this.parameters[path];
+    return this.$parameters[path];
   }
 
   /**
    * Get all parameters.
    */
   getParameters(): Record<string, string> {
-    return this.parameters;
+    return this.$parameters;
   }
 }
