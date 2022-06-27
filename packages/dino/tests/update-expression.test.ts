@@ -178,9 +178,7 @@ test('serializes expressions without undefined values', function (t) {
   const expression = new UpdateExpression()
     .set('onia', undefined)
     .add('name', undefined)
-    .delete('name', undefined)
-    .increment('size', undefined)
-    .decrement('size', undefined);
+    .delete('name', undefined);
 
   t.is(expression.serialize(attributes), '');
 

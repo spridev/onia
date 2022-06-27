@@ -56,8 +56,6 @@ export class UpdateExpression implements Expression {
     path: AttributePath | string,
     value: AttributePath | FunctionExpression | string | number = 1
   ): UpdateExpression {
-    if (value === undefined) return this;
-
     this.$set.set(path, new NumericExpression(path, '+', value));
 
     return this;
@@ -70,8 +68,6 @@ export class UpdateExpression implements Expression {
     path: AttributePath | string,
     value: AttributePath | FunctionExpression | string | number = 1
   ): UpdateExpression {
-    if (value === undefined) return this;
-
     this.$set.set(path, new NumericExpression(path, '-', value));
 
     return this;
