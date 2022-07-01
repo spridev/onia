@@ -18,7 +18,7 @@
     "eslint-plugin-ava": "^13.0.0",
     "eslint-plugin-import": "^2.0.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-unicorn": "^42.0.0"
+    "eslint-plugin-unicorn": "^43.0.0"
   },
   "peerDependencies": {
     "eslint": "^8.0.0",
