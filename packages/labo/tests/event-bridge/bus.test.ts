@@ -71,7 +71,7 @@ test('tears down the bus', async function (t) {
 
   const bus = new EventBridgeBus('bus');
 
-  bus['queueUrl'] = 'url';
+  bus['$queueUrl'] = 'url';
 
   await bus.teardown();
 
@@ -159,7 +159,7 @@ test('purges all events', async function (t) {
 
   const bus = new EventBridgeBus('bus');
 
-  bus['queueUrl'] = 'url';
+  bus['$queueUrl'] = 'url';
 
   await bus.purgeEvents();
 
