@@ -22,7 +22,7 @@
     "@aws-sdk/types": "^3.0.0"
   },
   "scripts": {
-    "test": "c8 --100 ava --serial",
+    "test": "c8 ava",
     "build": "tsc"
   }
 }
