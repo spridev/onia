@@ -1,8 +1,12 @@
 {
   "compilerOptions": {
-    "strict": true,
-    "target": "es2020",
+    "target": "es2021",
     "module": "commonjs",
-    "lib": ["es2020", "dom"]
+    "lib": ["es2021", "dom"],
+
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node"
   }
 }
