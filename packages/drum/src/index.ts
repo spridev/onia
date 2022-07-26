@@ -1,10 +1,11 @@
 import * as Fs from 'node:fs';
 import * as Path from 'node:path';
 
-import typescript from '@rollup/plugin-typescript';
+import types from '@rollup/plugin-typescript';
 import { sync } from 'fast-glob';
 
 import { bang } from './plugins/bang';
+import { clean } from './plugins/clean';
 import { copy } from './plugins/copy';
 import { ugly } from './plugins/ugly';
 
@@ -73,7 +74,8 @@ function bundleFunction(packagePath: string): RollupOptions {
     external: metadata.deps,
     onwarn: onWarning,
     plugins: [
-      typescript(),
+      clean([`build/${metadata.name}`]),
+      types(),
       ugly(),
       copy([
         {
@@ -101,7 +103,8 @@ function bundleExtension(packagePath: string): RollupOptions {
     external: metadata.deps,
     onwarn: onWarning,
     plugins: [
-      typescript(),
+      clean([`build/${metadata.name}`]),
+      types(),
       bang(),
       ugly(),
       copy([
