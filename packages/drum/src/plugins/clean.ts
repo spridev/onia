@@ -12,7 +12,9 @@ export function clean(paths: string[]): Plugin {
     name: 'clean',
     async buildStart(): Promise<void> {
       for (const path of paths) {
-        Fs.rmSync(path, { recursive: true });
+        if (Fs.existsSync(path)) {
+          Fs.rmSync(path, { recursive: true });
+        }
       }
 
       console.log(red(`deleted ${bold(paths.join(', '))}`));
