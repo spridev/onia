@@ -1,0 +1,27 @@
+{
+  "name": "@onia/drum",
+  "description": "Lambda Bundler",
+  "version": "0.0.0",
+  "license": "MIT",
+  "repository": "git://github.com/spridev/onia",
+  "homepage": "https://github.com/spridev/onia/tree/main/packages/drum",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "files": [
+    "build/**/*"
+  ],
+  "dependencies": {
+    "@rollup/plugin-typescript": "^8.0.0",
+    "colorette": "^2.0.0",
+    "fast-glob": "^3.0.0",
+    "magic-string": "^0.26.0",
+    "terser": "^5.0.0"
+  },
+  "peerDependencies": {
+    "rollup": "^2.0.0",
+    "typescript": "^4.0.0"
+  },
+  "scripts": {
+    "build": "tsc"
+  }
+}
