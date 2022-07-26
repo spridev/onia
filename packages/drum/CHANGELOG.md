@@ -1,5 +1,11 @@
 # @onia/drum
 
+## 0.1.2
+
+### Patch Changes
+
+- 26d876d: Clean the output directory only if it exists.
+
 ## 0.1.1
 
 ### Patch Changes
