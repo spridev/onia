@@ -3,16 +3,23 @@ import { AttributeValue as BaseAttributeValue } from '@aws-sdk/client-dynamodb';
 import { AttributePath } from './attribute-path';
 import { AttributeValue } from './attribute-value';
 
+/**
+ * Determine if the given object is empty.
+ */
+function isObjectEmpty<T>(object: Record<string, T>): boolean {
+  return Object.keys(object).length === 0;
+}
+
 export class ExpressionAttributes {
   /**
    * The attribute names.
    */
-  public readonly names: Record<string, string> = {};
+  private readonly $names: Record<string, string> = {};
 
   /**
    * The attribute values.
    */
-  public readonly values: Record<string, BaseAttributeValue> = {};
+  private readonly $values: Record<string, BaseAttributeValue> = {};
 
   /**
    * The attribute substitutions.
@@ -43,7 +50,7 @@ export class ExpressionAttributes {
         const substitution = this.$substitutions.get(element.name);
 
         if (substitution) {
-          this.names[substitution] = element.name;
+          this.$names[substitution] = element.name;
         }
 
         output += `.${substitution}`;
@@ -65,8 +72,22 @@ export class ExpressionAttributes {
 
     const substitution = `:value${this.$counter++}`;
 
-    this.values[substitution] = value.element;
+    this.$values[substitution] = value.element;
 
     return substitution;
+  }
+
+  /**
+   * Get the attribute names.
+   */
+  get names(): Record<string, string> | undefined {
+    return !isObjectEmpty(this.$names) ? this.$names : undefined;
+  }
+
+  /**
+   * Get the attribute values.
+   */
+  get values(): Record<string, BaseAttributeValue> | undefined {
+    return !isObjectEmpty(this.$values) ? this.$values : undefined;
   }
 }

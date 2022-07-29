@@ -4,25 +4,25 @@ export interface CompiledExpression {
   /**
    * The update expression.
    */
-  update?: string;
+  UpdateExpression?: string;
 
   /**
    * The condition expression.
    */
-  condition?: string;
+  ConditionExpression?: string;
 
   /**
    * The projection expression.
    */
-  projection?: string;
+  ProjectionExpression?: string;
 
   /**
    * The expression attribute names.
    */
-  names?: Record<string, string>;
+  ExpressionAttributeNames?: Record<string, string>;
 
   /**
    * The expression attribute values.
    */
-  values?: Record<string, BaseAttributeValue>;
+  ExpressionAttributeValues?: Record<string, BaseAttributeValue>;
 }

@@ -37,7 +37,7 @@ test('clears all attribute paths', function (t) {
 
   t.is(expression.serialize(attributes), '');
 
-  t.deepEqual(attributes.names, {});
+  t.is(attributes.names, undefined);
 });
 
 test('serializes projection expressions with nested paths', function (t) {

@@ -69,7 +69,7 @@ test('serializes less than or equal conditions', function (t) {
     '#name1': 'onia',
   });
 
-  t.deepEqual(attributes.values, {});
+  t.is(attributes.values, undefined);
 });
 
 test('serializes greater than conditions', function (t) {
@@ -88,7 +88,7 @@ test('serializes greater than conditions', function (t) {
     '#name1': 'onia',
   });
 
-  t.deepEqual(attributes.values, {});
+  t.is(attributes.values, undefined);
 });
 
 test('serializes greater than or equal conditions', function (t) {
@@ -107,7 +107,7 @@ test('serializes greater than or equal conditions', function (t) {
     '#name1': 'onia',
   });
 
-  t.deepEqual(attributes.values, {});
+  t.is(attributes.values, undefined);
 });
 
 test('serializes between conditions', function (t) {
@@ -164,7 +164,8 @@ test('serializes attribute exists functions', function (t) {
   t.is(expression.serialize(attributes), 'attribute_exists(#name0)');
 
   t.deepEqual(attributes.names, { '#name0': 'name' });
-  t.deepEqual(attributes.values, {});
+
+  t.is(attributes.values, undefined);
 });
 
 test('serializes attribute not exists functions', function (t) {
@@ -178,7 +179,8 @@ test('serializes attribute not exists functions', function (t) {
   t.is(expression.serialize(attributes), 'attribute_not_exists(#name0)');
 
   t.deepEqual(attributes.names, { '#name0': 'name' });
-  t.deepEqual(attributes.values, {});
+
+  t.is(attributes.values, undefined);
 });
 
 test('serializes attribute type functions', function (t) {

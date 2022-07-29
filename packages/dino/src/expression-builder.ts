@@ -82,19 +82,19 @@ export class ExpressionBuilder {
     const attributes = new ExpressionAttributes();
 
     if (this.$update) {
-      expression.update = this.$update.serialize(attributes);
+      expression.UpdateExpression = this.$update.serialize(attributes);
     }
 
     if (this.$condition) {
-      expression.condition = this.$condition.serialize(attributes);
+      expression.ConditionExpression = this.$condition.serialize(attributes);
     }
 
     if (this.$projection) {
-      expression.projection = this.$projection.serialize(attributes);
+      expression.ProjectionExpression = this.$projection.serialize(attributes);
     }
 
-    expression.names = attributes.names;
-    expression.values = attributes.values;
+    expression.ExpressionAttributeNames = attributes.names;
+    expression.ExpressionAttributeValues = attributes.values;
 
     return expression;
   }
