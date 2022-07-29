@@ -13,13 +13,13 @@ test('compiles update expressions', function (t) {
     .compile();
 
   t.deepEqual(expression, {
-    names: {
+    UpdateExpression: 'SET #name0 = :value1',
+    ExpressionAttributeNames: {
       '#name0': 'name',
     },
-    values: {
+    ExpressionAttributeValues: {
       ':value1': { S: 'spri' },
     },
-    update: 'SET #name0 = :value1',
   });
 });
 
@@ -35,13 +35,13 @@ test('compiles condition expressions', function (t) {
     .compile();
 
   t.deepEqual(expression, {
-    names: {
+    ConditionExpression: '#name0 = :value1',
+    ExpressionAttributeNames: {
       '#name0': 'name',
     },
-    values: {
+    ExpressionAttributeValues: {
       ':value1': { S: 'spri' },
     },
-    condition: '#name0 = :value1',
   });
 });
 
@@ -51,12 +51,12 @@ test('compiles projection expressions', function (t) {
     .compile();
 
   t.deepEqual(expression, {
-    names: {
+    ProjectionExpression: '#name0, #name1',
+    ExpressionAttributeNames: {
       '#name0': 'name',
       '#name1': 'age',
     },
-    values: undefined,
-    projection: '#name0, #name1',
+    ExpressionAttributeValues: undefined,
   });
 });
 
@@ -67,15 +67,15 @@ test('compiles multiple expressions', function (t) {
     .compile();
 
   t.deepEqual(expression, {
-    names: {
+    UpdateExpression: 'SET #name0 = :value1',
+    ProjectionExpression: '#name0, #name2',
+    ExpressionAttributeNames: {
       '#name0': 'name',
       '#name2': 'age',
     },
-    values: {
+    ExpressionAttributeValues: {
       ':value1': { S: 'spri' },
     },
-    update: 'SET #name0 = :value1',
-    projection: '#name0, #name2',
   });
 });
 
@@ -86,8 +86,8 @@ test('clears update expressions', function (t) {
     .compile();
 
   t.deepEqual(expression, {
-    names: undefined,
-    values: undefined,
+    ExpressionAttributeNames: undefined,
+    ExpressionAttributeValues: undefined,
   });
 });
 
@@ -104,8 +104,8 @@ test('clears condition expressions', function (t) {
     .compile();
 
   t.deepEqual(expression, {
-    names: undefined,
-    values: undefined,
+    ExpressionAttributeNames: undefined,
+    ExpressionAttributeValues: undefined,
   });
 });
 
@@ -116,7 +116,7 @@ test('clears projection expressions', function (t) {
     .compile();
 
   t.deepEqual(expression, {
-    names: undefined,
-    values: undefined,
+    ExpressionAttributeNames: undefined,
+    ExpressionAttributeValues: undefined,
   });
 });
