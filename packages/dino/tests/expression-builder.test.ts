@@ -55,7 +55,7 @@ test('compiles projection expressions', function (t) {
       '#name0': 'name',
       '#name1': 'age',
     },
-    values: {},
+    values: undefined,
     projection: '#name0, #name1',
   });
 });
@@ -86,8 +86,8 @@ test('clears update expressions', function (t) {
     .compile();
 
   t.deepEqual(expression, {
-    names: {},
-    values: {},
+    names: undefined,
+    values: undefined,
   });
 });
 
@@ -104,8 +104,8 @@ test('clears condition expressions', function (t) {
     .compile();
 
   t.deepEqual(expression, {
-    names: {},
-    values: {},
+    names: undefined,
+    values: undefined,
   });
 });
 
@@ -116,7 +116,7 @@ test('clears projection expressions', function (t) {
     .compile();
 
   t.deepEqual(expression, {
-    names: {},
-    values: {},
+    names: undefined,
+    values: undefined,
   });
 });

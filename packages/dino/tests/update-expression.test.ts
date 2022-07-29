@@ -62,7 +62,7 @@ test('serializes SET clauses with function expressions', function (t) {
     '#name1': 'items',
   });
 
-  t.deepEqual(attributes.values, {});
+  t.is(attributes.values, undefined);
 });
 
 test('serializes SET clauses with increments directives', function (t) {
@@ -142,7 +142,7 @@ test('serializes REMOVE clauses', function (t) {
     '#name1': 'age',
   });
 
-  t.deepEqual(attributes.values, {});
+  t.is(attributes.values, undefined);
 });
 
 test('serializes expressions with multiple clauses', function (t) {
@@ -182,6 +182,6 @@ test('serializes expressions without undefined values', function (t) {
 
   t.is(expression.serialize(attributes), '');
 
-  t.deepEqual(attributes.names, {});
-  t.deepEqual(attributes.values, {});
+  t.is(attributes.names, undefined);
+  t.is(attributes.values, undefined);
 });
