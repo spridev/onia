@@ -109,8 +109,11 @@ function bundleExtension(packagePath: string): RollupOptions {
       ugly(),
       copy([
         {
+          from: [`${metadata.path}/package.json`],
+          to: 'build',
+        },
+        {
           from: [
-            `${metadata.path}/package.json`,
             'extensions/Makefile',
             `extensions/extensions/${metadata.name}`,
           ],
