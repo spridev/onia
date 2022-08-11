@@ -2,19 +2,9 @@ import { AttributeValue as BaseAttributeValue } from '@aws-sdk/client-dynamodb';
 
 export interface CompiledExpression {
   /**
-   * The update expression.
+   * The expression table name.
    */
-  UpdateExpression?: string;
-
-  /**
-   * The condition expression.
-   */
-  ConditionExpression?: string;
-
-  /**
-   * The projection expression.
-   */
-  ProjectionExpression?: string;
+  TableName: string;
 
   /**
    * The expression attribute names.
