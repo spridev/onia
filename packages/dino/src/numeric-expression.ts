@@ -1,11 +1,13 @@
 import { AttributePath } from './attribute-path';
+import { AttributeValue } from './attribute-value';
 import { Expression } from './expression';
 import { ExpressionAttributes } from './expression-attributes';
 import { FunctionExpression } from './function-expression';
 
 export type NumericOperand =
-  | FunctionExpression
   | AttributePath
+  | AttributeValue
+  | FunctionExpression
   | string
   | number;
 

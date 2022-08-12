@@ -1,4 +1,5 @@
 import { AttributePath } from './attribute-path';
+import { AttributeValue } from './attribute-value';
 import { Expression } from './expression';
 import { ExpressionAttributes } from './expression-attributes';
 
@@ -8,7 +9,12 @@ export class FunctionExpression implements Expression {
    */
   constructor(
     private readonly $name: string,
-    private readonly $arguments: (AttributePath | FunctionExpression | any)[]
+    private readonly $arguments: (
+      | AttributePath
+      | AttributeValue
+      | FunctionExpression
+      | any
+    )[]
   ) {}
 
   /**

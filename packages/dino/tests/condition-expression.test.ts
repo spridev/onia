@@ -157,7 +157,7 @@ test('serializes attribute exists functions', function (t) {
   const attributes = new ExpressionAttributes();
 
   const expression = new ConditionExpression({
-    type: 'AttributeExists',
+    type: 'Exists',
     subject: 'name',
   });
 
@@ -172,7 +172,7 @@ test('serializes attribute not exists functions', function (t) {
   const attributes = new ExpressionAttributes();
 
   const expression = new ConditionExpression({
-    type: 'AttributeNotExists',
+    type: 'NotExists',
     subject: 'name',
   });
 
@@ -187,7 +187,7 @@ test('serializes attribute type functions', function (t) {
   const attributes = new ExpressionAttributes();
 
   const expression = new ConditionExpression({
-    type: 'AttributeType',
+    type: 'Type',
     subject: 'name',
     expected: 'S',
   });
@@ -196,21 +196,6 @@ test('serializes attribute type functions', function (t) {
 
   t.deepEqual(attributes.names, { '#name0': 'name' });
   t.deepEqual(attributes.values, { ':value1': { S: 'S' } });
-});
-
-test('serializes begins with functions', function (t) {
-  const attributes = new ExpressionAttributes();
-
-  const expression = new ConditionExpression({
-    type: 'BeginsWith',
-    subject: new AttributePath('name'),
-    expected: 'spri',
-  });
-
-  t.is(expression.serialize(attributes), 'begins_with(#name0, :value1)');
-
-  t.deepEqual(attributes.names, { '#name0': 'name' });
-  t.deepEqual(attributes.values, { ':value1': { S: 'spri' } });
 });
 
 test('serializes contains functions', function (t) {
@@ -223,6 +208,21 @@ test('serializes contains functions', function (t) {
   });
 
   t.is(expression.serialize(attributes), 'contains(#name0, :value1)');
+
+  t.deepEqual(attributes.names, { '#name0': 'name' });
+  t.deepEqual(attributes.values, { ':value1': { S: 'spri' } });
+});
+
+test('serializes begins with functions', function (t) {
+  const attributes = new ExpressionAttributes();
+
+  const expression = new ConditionExpression({
+    type: 'BeginsWith',
+    subject: new AttributePath('name'),
+    expected: 'spri',
+  });
+
+  t.is(expression.serialize(attributes), 'begins_with(#name0, :value1)');
 
   t.deepEqual(attributes.names, { '#name0': 'name' });
   t.deepEqual(attributes.values, { ':value1': { S: 'spri' } });

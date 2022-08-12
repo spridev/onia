@@ -1,7 +1,6 @@
-import { AttributeValue as BaseAttributeValue } from '@aws-sdk/client-dynamodb';
-
 import { AttributePath } from './attribute-path';
 import { AttributeValue } from './attribute-value';
+import { AttributeValueModel } from './attribute-value-model';
 
 /**
  * Determine if the given object is empty.
@@ -19,7 +18,7 @@ export class ExpressionAttributes {
   /**
    * The attribute values.
    */
-  private readonly $values: Record<string, BaseAttributeValue> = {};
+  private readonly $values: Record<string, AttributeValueModel> = {};
 
   /**
    * The attribute substitutions.
@@ -35,13 +34,11 @@ export class ExpressionAttributes {
    * Add an attribute path to this substitution context.
    */
   addName(path: AttributePath | string): string {
-    if (!(path instanceof AttributePath)) {
-      return this.addName(new AttributePath(path));
-    }
+    const { elements } = AttributePath.wrap(path);
 
     let output = '';
 
-    for (const element of path.elements) {
+    for (const element of elements) {
       if ('name' in element) {
         if (!this.$substitutions.has(element.name)) {
           this.$substitutions.set(element.name, `#name${this.$counter++}`);
@@ -66,13 +63,11 @@ export class ExpressionAttributes {
    * Add an attribute value to this substitution context.
    */
   addValue(value: AttributeValue | any): string {
-    if (!(value instanceof AttributeValue)) {
-      return this.addValue(new AttributeValue(value));
-    }
+    const { element } = AttributeValue.wrap(value);
 
     const substitution = `:value${this.$counter++}`;
 
-    this.$values[substitution] = value.element;
+    this.$values[substitution] = element;
 
     return substitution;
   }
@@ -87,7 +82,7 @@ export class ExpressionAttributes {
   /**
    * Get the attribute values.
    */
-  get values(): Record<string, BaseAttributeValue> | undefined {
+  get values(): Record<string, AttributeValueModel> | undefined {
     return !isObjectEmpty(this.$values) ? this.$values : undefined;
   }
 }

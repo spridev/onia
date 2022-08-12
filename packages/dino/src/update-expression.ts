@@ -40,11 +40,38 @@ export class UpdateExpression implements Expression {
    */
   set(
     path: AttributePath | string,
-    value: AttributeValue | FunctionExpression | NumericExpression | any
+    value: AttributeValue | FunctionExpression | NumericExpression | any,
+    overwrite = true
   ): UpdateExpression {
     if (value === undefined) return this;
 
-    this.$set.set(path, value);
+    if (overwrite) {
+      this.$set.set(path, value);
+    } else {
+      const expression = new FunctionExpression('if_not_exists', [
+        AttributePath.wrap(path),
+        value,
+      ]);
+
+      this.$set.set(path, expression);
+    }
+
+    return this;
+  }
+
+  /**
+   * Add an append directive to the expression's SET clause.
+   */
+  append(
+    path: AttributePath | string,
+    values: (AttributePath | AttributeValue | any)[]
+  ): UpdateExpression {
+    const expression = new FunctionExpression('list_append', [
+      AttributePath.wrap(path),
+      values,
+    ]);
+
+    this.$set.set(path, expression);
 
     return this;
   }

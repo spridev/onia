@@ -122,10 +122,20 @@ export class AttributePath {
   }
 
   /**
+   * Wrap the given path in an attribute path.
+   */
+  static wrap(path: AttributePath | string): AttributePath {
+    if (path instanceof AttributePath) {
+      return path;
+    }
+
+    return new AttributePath(path);
+  }
+
+  /**
    * Create a new attribute path.
    */
-  constructor(path: PathElement[] | string) {
-    this.elements =
-      typeof path === 'string' ? AttributePath.parse(path) : [...path];
+  constructor(path: string) {
+    this.elements = AttributePath.parse(path);
   }
 }

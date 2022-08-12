@@ -1,7 +1,6 @@
-import { AttributeValue as BaseAttributeValue } from '@aws-sdk/client-dynamodb';
-
 import { AttributePath } from './attribute-path';
 import { AttributeValue } from './attribute-value';
+import { AttributeValueModel } from './attribute-value-model';
 import { Expression } from './expression';
 import { ExpressionAttributes } from './expression-attributes';
 import { FunctionExpression } from './function-expression';
@@ -34,22 +33,17 @@ export interface MembershipExpressionPredicate {
   values: ComparisonOperand[];
 }
 
-export interface AttributeExistsPredicate {
-  type: 'AttributeExists';
+export interface ExistsPredicate {
+  type: 'Exists';
 }
 
-export interface AttributeNotExistsPredicate {
-  type: 'AttributeNotExists';
+export interface NotExistsPredicate {
+  type: 'NotExists';
 }
 
-export interface AttributeTypePredicate {
-  type: 'AttributeType';
-  expected: keyof BaseAttributeValue;
-}
-
-export interface BeginsWithPredicate {
-  type: 'BeginsWith';
-  expected: string;
+export interface TypePredicate {
+  type: 'Type';
+  expected: keyof AttributeValueModel;
 }
 
 export interface ContainsPredicate {
@@ -57,15 +51,20 @@ export interface ContainsPredicate {
   expected: string;
 }
 
+export interface BeginsWithPredicate {
+  type: 'BeginsWith';
+  expected: string;
+}
+
 export type ConditionExpressionPredicate =
   | BinaryExpressionPredicate
   | BetweenExpressionPredicate
   | MembershipExpressionPredicate
-  | AttributeExistsPredicate
-  | AttributeNotExistsPredicate
-  | AttributeTypePredicate
-  | BeginsWithPredicate
-  | ContainsPredicate;
+  | ExistsPredicate
+  | NotExistsPredicate
+  | TypePredicate
+  | ContainsPredicate
+  | BeginsWithPredicate;
 
 export interface ConditionExpressionSubject {
   subject: AttributePath | string;
@@ -141,33 +140,33 @@ export class ConditionExpression implements Expression {
         return `${attributes.addName(condition.subject)} IN (${condition.values
           .map((v) => this.serializeComparisonOperand(v, attributes))
           .join(', ')})`;
-      case 'AttributeExists':
+      case 'Exists':
         return this.serializeFunctionExpression(
           'attribute_exists',
           condition,
           attributes
         );
-      case 'AttributeNotExists':
+      case 'NotExists':
         return this.serializeFunctionExpression(
           'attribute_not_exists',
           condition,
           attributes
         );
-      case 'AttributeType':
+      case 'Type':
         return this.serializeFunctionExpression(
           'attribute_type',
-          condition,
-          attributes
-        );
-      case 'BeginsWith':
-        return this.serializeFunctionExpression(
-          'begins_with',
           condition,
           attributes
         );
       case 'Contains':
         return this.serializeFunctionExpression(
           'contains',
+          condition,
+          attributes
+        );
+      case 'BeginsWith':
+        return this.serializeFunctionExpression(
+          'begins_with',
           condition,
           attributes
         );
@@ -221,11 +220,7 @@ export class ConditionExpression implements Expression {
   ): string {
     const items: (AttributePath | string)[] = [];
 
-    if (condition.subject instanceof AttributePath) {
-      items.push(condition.subject);
-    } else {
-      items.push(new AttributePath(condition.subject));
-    }
+    items.push(AttributePath.wrap(condition.subject));
 
     if (condition.expected) {
       items.push(condition.expected);

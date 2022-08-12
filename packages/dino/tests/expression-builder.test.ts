@@ -8,11 +8,16 @@ import {
 } from '../src';
 
 test('compiles update expressions', function (t) {
-  const expression = new ExpressionBuilder()
-    .withUpdate(new UpdateExpression().set('name', 'spri'))
-    .compile();
+  const builder = new ExpressionBuilder('onia-table');
+
+  const update = new UpdateExpression().set('name', 'spri');
+
+  const expression = builder.compile((attributes) => ({
+    UpdateExpression: update.serialize(attributes),
+  }));
 
   t.deepEqual(expression, {
+    TableName: 'onia-table',
     UpdateExpression: 'SET #name0 = :value1',
     ExpressionAttributeNames: {
       '#name0': 'name',
@@ -24,17 +29,20 @@ test('compiles update expressions', function (t) {
 });
 
 test('compiles condition expressions', function (t) {
-  const expression = new ExpressionBuilder()
-    .withCondition(
-      new ConditionExpression({
-        type: 'Equals',
-        subject: 'name',
-        value: 'spri',
-      })
-    )
-    .compile();
+  const builder = new ExpressionBuilder('onia-table');
+
+  const condition = new ConditionExpression({
+    type: 'Equals',
+    subject: 'name',
+    value: 'spri',
+  });
+
+  const expression = builder.compile((attributes) => ({
+    ConditionExpression: condition.serialize(attributes),
+  }));
 
   t.deepEqual(expression, {
+    TableName: 'onia-table',
     ConditionExpression: '#name0 = :value1',
     ExpressionAttributeNames: {
       '#name0': 'name',
@@ -46,11 +54,16 @@ test('compiles condition expressions', function (t) {
 });
 
 test('compiles projection expressions', function (t) {
-  const expression = new ExpressionBuilder()
-    .withProjection(new ProjectionExpression().add('name', 'age'))
-    .compile();
+  const builder = new ExpressionBuilder('onia-table');
+
+  const projection = new ProjectionExpression().add('name', 'age');
+
+  const expression = builder.compile((attributes) => ({
+    ProjectionExpression: projection.serialize(attributes),
+  }));
 
   t.deepEqual(expression, {
+    TableName: 'onia-table',
     ProjectionExpression: '#name0, #name1',
     ExpressionAttributeNames: {
       '#name0': 'name',
@@ -61,12 +74,19 @@ test('compiles projection expressions', function (t) {
 });
 
 test('compiles multiple expressions', function (t) {
-  const expression = new ExpressionBuilder()
-    .withUpdate(new UpdateExpression().set('name', 'spri'))
-    .withProjection(new ProjectionExpression().add('name', 'age'))
-    .compile();
+  const builder = new ExpressionBuilder('onia-table');
+
+  const update = new UpdateExpression().set('name', 'spri');
+
+  const projection = new ProjectionExpression().add('name', 'age');
+
+  const expression = builder.compile((attributes) => ({
+    UpdateExpression: update.serialize(attributes),
+    ProjectionExpression: projection.serialize(attributes),
+  }));
 
   t.deepEqual(expression, {
+    TableName: 'onia-table',
     UpdateExpression: 'SET #name0 = :value1',
     ProjectionExpression: '#name0, #name2',
     ExpressionAttributeNames: {
@@ -76,47 +96,5 @@ test('compiles multiple expressions', function (t) {
     ExpressionAttributeValues: {
       ':value1': { S: 'spri' },
     },
-  });
-});
-
-test('clears update expressions', function (t) {
-  const expression = new ExpressionBuilder()
-    .withUpdate(new UpdateExpression().set('name', 'spri'))
-    .clearUpdate()
-    .compile();
-
-  t.deepEqual(expression, {
-    ExpressionAttributeNames: undefined,
-    ExpressionAttributeValues: undefined,
-  });
-});
-
-test('clears condition expressions', function (t) {
-  const expression = new ExpressionBuilder()
-    .withCondition(
-      new ConditionExpression({
-        type: 'Equals',
-        subject: 'name',
-        value: 'spri',
-      })
-    )
-    .clearCondition()
-    .compile();
-
-  t.deepEqual(expression, {
-    ExpressionAttributeNames: undefined,
-    ExpressionAttributeValues: undefined,
-  });
-});
-
-test('clears projection expressions', function (t) {
-  const expression = new ExpressionBuilder()
-    .withProjection(new ProjectionExpression().add('name', 'age'))
-    .clearProjection()
-    .compile();
-
-  t.deepEqual(expression, {
-    ExpressionAttributeNames: undefined,
-    ExpressionAttributeValues: undefined,
   });
 });

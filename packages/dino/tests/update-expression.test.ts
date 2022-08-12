@@ -15,7 +15,7 @@ test('serializes SET clauses', function (t) {
 
   const expression = new UpdateExpression()
     .set('name', new Set(['onia', 'dino']))
-    .set('age', 24);
+    .set('age', 25);
 
   t.is(
     expression.serialize(attributes),
@@ -29,7 +29,30 @@ test('serializes SET clauses', function (t) {
 
   t.deepEqual(attributes.values, {
     ':value1': { SS: ['onia', 'dino'] },
-    ':value3': { N: '24' },
+    ':value3': { N: '25' },
+  });
+});
+
+test('serializes SET clauses without overriding an existing attribute', function (t) {
+  const attributes = new ExpressionAttributes();
+
+  const expression = new UpdateExpression()
+    .set('name', new Set(['onia', 'dino']), false)
+    .set('age', 25, false);
+
+  t.is(
+    expression.serialize(attributes),
+    'SET #name0 = if_not_exists(#name0, :value1), #name2 = if_not_exists(#name2, :value3)'
+  );
+
+  t.deepEqual(attributes.names, {
+    '#name0': 'name',
+    '#name2': 'age',
+  });
+
+  t.deepEqual(attributes.values, {
+    ':value1': { SS: ['onia', 'dino'] },
+    ':value3': { N: '25' },
   });
 });
 
@@ -65,6 +88,31 @@ test('serializes SET clauses with function expressions', function (t) {
   t.is(attributes.values, undefined);
 });
 
+test('serializes SET clauses with appends directives', function (t) {
+  const attributes = new ExpressionAttributes();
+
+  const expression = new UpdateExpression().append('comments', [
+    { user: 'spri', body: 'hello' },
+    { user: 'onia', body: 'world' },
+  ]);
+
+  t.is(
+    expression.serialize(attributes),
+    'SET #name0 = list_append(#name0, :value1)'
+  );
+
+  t.deepEqual(attributes.names, {
+    '#name0': 'comments',
+  });
+
+  t.deepEqual(attributes.values, {
+    ':value1': [
+      { M: { user: { S: 'spri' }, body: { S: 'hello' } } },
+      { M: { user: { S: 'onia' }, body: { S: 'world' } } },
+    ],
+  });
+});
+
 test('serializes SET clauses with increments directives', function (t) {
   const attributes = new ExpressionAttributes();
 
@@ -92,7 +140,7 @@ test('serializes ADD clauses', function (t) {
 
   const expression = new UpdateExpression()
     .add('name', new Set(['onia', 'dino']))
-    .add('age', 24);
+    .add('age', 25);
 
   t.is(expression.serialize(attributes), 'ADD #name0 :value1, #name2 :value3');
 
@@ -103,7 +151,7 @@ test('serializes ADD clauses', function (t) {
 
   t.deepEqual(attributes.values, {
     ':value1': { SS: ['onia', 'dino'] },
-    ':value3': { N: '24' },
+    ':value3': { N: '25' },
   });
 });
 
@@ -112,7 +160,7 @@ test('serializes DELETE clauses', function (t) {
 
   const expression = new UpdateExpression()
     .delete('name', new Set(['onia', 'dino']))
-    .delete('age', 24);
+    .delete('age', 25);
 
   t.is(
     expression.serialize(attributes),
@@ -126,7 +174,7 @@ test('serializes DELETE clauses', function (t) {
 
   t.deepEqual(attributes.values, {
     ':value1': { SS: ['onia', 'dino'] },
-    ':value3': { N: '24' },
+    ':value3': { N: '25' },
   });
 });
 
