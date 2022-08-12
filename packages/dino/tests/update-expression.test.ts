@@ -33,6 +33,29 @@ test('serializes SET clauses', function (t) {
   });
 });
 
+test('serializes SET clauses without overriding an existing attribute', function (t) {
+  const attributes = new ExpressionAttributes();
+
+  const expression = new UpdateExpression()
+    .set('name', 'onia', false)
+    .set(new AttributePath('age'), 25, false);
+
+  t.is(
+    expression.serialize(attributes),
+    'SET #name0 = if_not_exists(#name0, :value1), #name2 = if_not_exists(#name2, :value3)'
+  );
+
+  t.deepEqual(attributes.names, {
+    '#name0': 'name',
+    '#name2': 'age',
+  });
+
+  t.deepEqual(attributes.values, {
+    ':value1': { S: 'onia' },
+    ':value3': { N: '25' },
+  });
+});
+
 test('serializes SET clauses with numeric expressions', function (t) {
   const attributes = new ExpressionAttributes();
 

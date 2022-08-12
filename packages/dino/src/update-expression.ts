@@ -40,11 +40,24 @@ export class UpdateExpression implements Expression {
    */
   set(
     path: AttributePath | string,
-    value: AttributeValue | FunctionExpression | NumericExpression | any
+    value: AttributeValue | FunctionExpression | NumericExpression | any,
+    overwrite = true
   ): UpdateExpression {
     if (value === undefined) return this;
 
-    this.$set.set(path, value);
+    if (overwrite) {
+      this.$set.set(path, value);
+    } else {
+      this.$set.set(
+        path,
+        new FunctionExpression('if_not_exists', [
+          typeof path === 'string' ? new AttributePath(path) : path,
+          value,
+        ])
+      );
+    }
+    return this;
+  }
 
   /**
    * Add an append directive to the expression's SET clause.
