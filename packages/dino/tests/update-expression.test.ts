@@ -65,6 +65,29 @@ test('serializes SET clauses with function expressions', function (t) {
   t.is(attributes.values, undefined);
 });
 
+test('serializes SET clauses with appends directives', function (t) {
+  const attributes = new ExpressionAttributes();
+
+  const expression = new UpdateExpression()
+    .append('comments', [{ user: 'spri', body: 'hello' }])
+    .append(new AttributePath('food'), ['pasta', 'tomatoes']);
+
+  t.is(
+    expression.serialize(attributes),
+    'SET #name0 = list_append(#name0, :value1), #name2 = list_append(#name2, :value3)'
+  );
+
+  t.deepEqual(attributes.names, {
+    '#name0': 'comments',
+    '#name2': 'food',
+  });
+
+  t.deepEqual(attributes.values, {
+    ':value1': [{ M: { user: { S: 'spri' }, body: { S: 'hello' } } }],
+    ':value3': [{ S: 'pasta' }, { S: 'tomatoes' }],
+  });
+});
+
 test('serializes SET clauses with increments directives', function (t) {
   const attributes = new ExpressionAttributes();
 

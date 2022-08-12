@@ -46,6 +46,21 @@ export class UpdateExpression implements Expression {
 
     this.$set.set(path, value);
 
+  /**
+   * Add an append directive to the expression's SET clause.
+   */
+  append(
+    path: AttributePath | string,
+    values: (AttributePath | AttributeValue | any)[]
+  ): UpdateExpression {
+    this.$set.set(
+      path,
+      new FunctionExpression('list_append', [
+        typeof path === 'string' ? new AttributePath(path) : path,
+        values,
+      ])
+    );
+
     return this;
   }
 
