@@ -22,13 +22,15 @@ test('exposes all values', function (t) {
   const attributes = new ExpressionAttributes();
 
   attributes.addValue('onia');
+  attributes.addValue(() => 'nano');
   attributes.addValue(new AttributeValue('dino'));
   attributes.addValue(new AttributeValue({ S: 'spri' }, true));
 
   t.deepEqual(attributes.values, {
     ':value0': { S: 'onia' },
-    ':value1': { S: 'dino' },
-    ':value2': { S: 'spri' },
+    ':value1': { S: 'nano' },
+    ':value2': { S: 'dino' },
+    ':value3': { S: 'spri' },
   });
 });
 

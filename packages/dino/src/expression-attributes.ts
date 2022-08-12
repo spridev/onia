@@ -66,6 +66,10 @@ export class ExpressionAttributes {
    * Add an attribute value to this substitution context.
    */
   addValue(value: AttributeValue | any): string {
+    if (typeof value === 'function') {
+      return this.addValue(new AttributeValue(value()));
+    }
+
     if (!(value instanceof AttributeValue)) {
       return this.addValue(new AttributeValue(value));
     }
