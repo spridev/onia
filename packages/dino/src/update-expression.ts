@@ -48,14 +48,14 @@ export class UpdateExpression implements Expression {
     if (overwrite) {
       this.$set.set(path, value);
     } else {
-      this.$set.set(
-        path,
-        new FunctionExpression('if_not_exists', [
-          typeof path === 'string' ? new AttributePath(path) : path,
-          value,
-        ])
-      );
+      const expression = new FunctionExpression('if_not_exists', [
+        AttributePath.wrap(path),
+        value,
+      ]);
+
+      this.$set.set(path, expression);
     }
+
     return this;
   }
 
@@ -66,13 +66,12 @@ export class UpdateExpression implements Expression {
     path: AttributePath | string,
     values: (AttributePath | AttributeValue | any)[]
   ): UpdateExpression {
-    this.$set.set(
-      path,
-      new FunctionExpression('list_append', [
-        typeof path === 'string' ? new AttributePath(path) : path,
-        values,
-      ])
-    );
+    const expression = new FunctionExpression('list_append', [
+      AttributePath.wrap(path),
+      values,
+    ]);
+
+    this.$set.set(path, expression);
 
     return this;
   }

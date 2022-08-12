@@ -220,11 +220,7 @@ export class ConditionExpression implements Expression {
   ): string {
     const items: (AttributePath | string)[] = [];
 
-    if (condition.subject instanceof AttributePath) {
-      items.push(condition.subject);
-    } else {
-      items.push(new AttributePath(condition.subject));
-    }
+    items.push(AttributePath.wrap(condition.subject));
 
     if (condition.expected) {
       items.push(condition.expected);
