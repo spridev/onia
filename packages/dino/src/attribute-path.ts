@@ -122,6 +122,17 @@ export class AttributePath {
   }
 
   /**
+   * Wrap the given path in an attribute path.
+   */
+  static wrap(path: AttributePath | string): AttributePath {
+    if (path instanceof AttributePath) {
+      return path;
+    }
+
+    return new AttributePath(path);
+  }
+
+  /**
    * Create a new attribute path.
    */
   constructor(path: string) {

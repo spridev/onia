@@ -34,13 +34,11 @@ export class ExpressionAttributes {
    * Add an attribute path to this substitution context.
    */
   addName(path: AttributePath | string): string {
-    if (!(path instanceof AttributePath)) {
-      return this.addName(new AttributePath(path));
-    }
+    const { elements } = AttributePath.wrap(path);
 
     let output = '';
 
-    for (const element of path.elements) {
+    for (const element of elements) {
       if ('name' in element) {
         if (!this.$substitutions.has(element.name)) {
           this.$substitutions.set(element.name, `#name${this.$counter++}`);
@@ -65,17 +63,11 @@ export class ExpressionAttributes {
    * Add an attribute value to this substitution context.
    */
   addValue(value: AttributeValue | any): string {
-    if (typeof value === 'function') {
-      return this.addValue(new AttributeValue(value()));
-    }
-
-    if (!(value instanceof AttributeValue)) {
-      return this.addValue(new AttributeValue(value));
-    }
+    const { element } = AttributeValue.wrap(value);
 
     const substitution = `:value${this.$counter++}`;
 
-    this.$values[substitution] = value.element;
+    this.$values[substitution] = element;
 
     return substitution;
   }
