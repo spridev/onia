@@ -124,8 +124,7 @@ export class AttributePath {
   /**
    * Create a new attribute path.
    */
-  constructor(path: PathElement[] | string) {
-    this.elements =
-      typeof path === 'string' ? AttributePath.parse(path) : [...path];
+  constructor(path: string) {
+    this.elements = AttributePath.parse(path);
   }
 }

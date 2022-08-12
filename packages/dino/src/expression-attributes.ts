@@ -1,7 +1,6 @@
-import { AttributeValue as BaseAttributeValue } from '@aws-sdk/client-dynamodb';
-
 import { AttributePath } from './attribute-path';
 import { AttributeValue } from './attribute-value';
+import { AttributeValueModel } from './attribute-value-model';
 
 /**
  * Determine if the given object is empty.
@@ -19,7 +18,7 @@ export class ExpressionAttributes {
   /**
    * The attribute values.
    */
-  private readonly $values: Record<string, BaseAttributeValue> = {};
+  private readonly $values: Record<string, AttributeValueModel> = {};
 
   /**
    * The attribute substitutions.
@@ -91,7 +90,7 @@ export class ExpressionAttributes {
   /**
    * Get the attribute values.
    */
-  get values(): Record<string, BaseAttributeValue> | undefined {
+  get values(): Record<string, AttributeValueModel> | undefined {
     return !isObjectEmpty(this.$values) ? this.$values : undefined;
   }
 }

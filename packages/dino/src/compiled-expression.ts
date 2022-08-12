@@ -1,4 +1,4 @@
-import { AttributeValue as BaseAttributeValue } from '@aws-sdk/client-dynamodb';
+import { AttributeValueModel } from './attribute-value-model';
 
 export interface CompiledExpression {
   /**
@@ -14,5 +14,5 @@ export interface CompiledExpression {
   /**
    * The expression attribute values.
    */
-  ExpressionAttributeValues?: Record<string, BaseAttributeValue>;
+  ExpressionAttributeValues?: Record<string, AttributeValueModel>;
 }

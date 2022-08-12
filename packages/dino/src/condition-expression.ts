@@ -1,7 +1,6 @@
-import { AttributeValue as BaseAttributeValue } from '@aws-sdk/client-dynamodb';
-
 import { AttributePath } from './attribute-path';
 import { AttributeValue } from './attribute-value';
+import { AttributeValueModel } from './attribute-value-model';
 import { Expression } from './expression';
 import { ExpressionAttributes } from './expression-attributes';
 import { FunctionExpression } from './function-expression';
@@ -44,7 +43,7 @@ export interface AttributeNotExistsPredicate {
 
 export interface AttributeTypePredicate {
   type: 'AttributeType';
-  expected: keyof BaseAttributeValue;
+  expected: keyof AttributeValueModel;
 }
 
 export interface BeginsWithPredicate {

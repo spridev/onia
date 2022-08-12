@@ -1,6 +1,6 @@
 import test from 'ava';
 
-import { AttributePath, PathElement } from '../src';
+import { AttributePath } from '../src';
 
 test('creates an attribute path from a string', function (t) {
   t.like(new AttributePath('onia.dino.spri[3][4][2].dino[0].onia[1]'), {
@@ -17,29 +17,6 @@ test('creates an attribute path from a string', function (t) {
       { index: 1 },
     ],
   });
-});
-
-test('creates an attribute path from path elements', function (t) {
-  const elements: PathElement[] = [
-    { name: 'onia' },
-    { name: 'dino' },
-    { name: 'spri' },
-    { index: 3 },
-    { index: 4 },
-    { index: 2 },
-    { name: 'dino' },
-    { index: 0 },
-    { name: 'onia' },
-    { index: 1 },
-  ];
-
-  const path = new AttributePath(elements);
-
-  t.deepEqual(path.elements, elements);
-
-  elements.shift();
-
-  t.deepEqual(path.elements.slice(1), elements);
 });
 
 test('allows embedded control characters', function (t) {
