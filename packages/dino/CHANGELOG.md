@@ -1,5 +1,17 @@
 # @onia/dino
 
+## 0.3.0
+
+### Minor Changes
+
+- 2c206a5: Change the `ExpressionBuilder` to serialize the attributes in a flexible way.
+
+### Patch Changes
+
+- 2c206a5: The `AttributeValue` now correctly handles functions.
+- 2c206a5: Add an `append` method to the `UpdateExpression` class.
+- 2c206a5: When updating the value of an attribute, add an optional `overwrite` parameter to prevent overwriting existing values (`true` by default).
+
 ## 0.2.0
 
 ### Minor Changes

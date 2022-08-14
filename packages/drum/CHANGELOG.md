@@ -1,5 +1,11 @@
 # @onia/drum
 
+## 0.2.0
+
+### Minor Changes
+
+- 776bc36: Change the `BundleOptions` format to handle lambda extensions, functions and layers in a flexible way.
+
 ## 0.1.2
 
 ### Patch Changes
