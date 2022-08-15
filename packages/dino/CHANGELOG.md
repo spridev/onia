@@ -1,5 +1,12 @@
 # @onia/dino
 
+## 0.3.1
+
+### Patch Changes
+
+- b1bee43: Make the `ExpressionBuilder`'s table name public.
+- 63894da: Add chainable methods to the `ConditionExpression` class.
+
 ## 0.3.0
 
 ### Minor Changes
