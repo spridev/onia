@@ -11,15 +11,12 @@ export type ComparisonOperand =
   | FunctionExpression
   | any;
 
+export type ComparisonOperator = '=' | '<>' | '<' | '<=' | '>' | '>=';
+
 export interface BinaryExpressionPredicate {
-  type:
-    | 'Equals'
-    | 'NotEquals'
-    | 'LessThan'
-    | 'LessThanOrEqual'
-    | 'GreaterThan'
-    | 'GreaterThanOrEqual';
+  type: 'Binary';
   value: ComparisonOperand;
+  operator: ComparisonOperator;
 }
 
 export interface BetweenExpressionPredicate {
@@ -94,9 +91,169 @@ export type Condition =
 
 export class ConditionExpression implements Expression {
   /**
+   * The expression conditions.
+   */
+  private readonly $conditions: Condition[] = [];
+
+  /**
    * Create a new condition expression.
    */
-  constructor(private readonly $condition: Condition) {}
+  constructor(conditions?: Condition[]) {
+    if (conditions) {
+      this.$conditions = conditions;
+    }
+  }
+
+  /**
+   * Add a binary expression to the conditions.
+   */
+  where(
+    subject: ConditionExpressionSubject['subject'],
+    operator: BinaryExpressionPredicate['operator'],
+    value: BinaryExpressionPredicate['value']
+  ): ConditionExpression {
+    this.$conditions.push({ type: 'Binary', subject, value, operator });
+
+    return this;
+  }
+
+  /**
+   * Add a between expression to the conditions.
+   */
+  between(
+    subject: ConditionExpressionSubject['subject'],
+    values: [
+      BetweenExpressionPredicate['lowerBound'],
+      BetweenExpressionPredicate['upperBound']
+    ]
+  ): ConditionExpression {
+    this.$conditions.push({
+      type: 'Between',
+      subject,
+      lowerBound: values[0],
+      upperBound: values[1],
+    });
+
+    return this;
+  }
+
+  /**
+   * Add a membership expression to the conditions.
+   */
+  includes(
+    subject: ConditionExpressionSubject['subject'],
+    values: MembershipExpressionPredicate['values']
+  ): ConditionExpression {
+    this.$conditions.push({ type: 'Membership', subject, values });
+
+    return this;
+  }
+
+  /**
+   * Add an attribute exists expression to the conditions.
+   */
+  exists(subject: ConditionExpressionSubject['subject']): ConditionExpression {
+    this.$conditions.push({ type: 'Exists', subject });
+
+    return this;
+  }
+
+  /**
+   * Add an attribute not exists expression to the conditions.
+   */
+  notExists(
+    subject: ConditionExpressionSubject['subject']
+  ): ConditionExpression {
+    this.$conditions.push({ type: 'NotExists', subject });
+
+    return this;
+  }
+
+  /**
+   * Add an attribute type expression to the conditions.
+   */
+  type(
+    subject: ConditionExpressionSubject['subject'],
+    expected: TypePredicate['expected']
+  ): ConditionExpression {
+    this.$conditions.push({ type: 'Type', subject, expected });
+
+    return this;
+  }
+
+  /**
+   * Add a contains expression to the conditions.
+   */
+  contains(
+    subject: ConditionExpressionSubject['subject'],
+    expected: ContainsPredicate['expected']
+  ): ConditionExpression {
+    this.$conditions.push({ type: 'Contains', subject, expected });
+
+    return this;
+  }
+
+  /**
+   * Add a begins with expression to the conditions.
+   */
+  beginsWith(
+    subject: ConditionExpressionSubject['subject'],
+    expected: BeginsWithPredicate['expected']
+  ): ConditionExpression {
+    this.$conditions.push({ type: 'BeginsWith', subject, expected });
+
+    return this;
+  }
+
+  /**
+   * Add a function expression to the conditions.
+   */
+  func(expression: FunctionExpression): ConditionExpression {
+    this.$conditions.push(expression);
+
+    return this;
+  }
+
+  /**
+   * Add a negation expression to the conditions.
+   */
+  not(builder: (expression: ConditionExpression) => void): ConditionExpression {
+    const expression = new ConditionExpression();
+
+    builder(expression);
+
+    const [condition] = expression.$conditions;
+
+    this.$conditions.push({ type: 'Not', condition });
+
+    return this;
+  }
+
+  /**
+   * Add an and expression to the conditions.
+   */
+  and(builder: (expression: ConditionExpression) => void): ConditionExpression {
+    const expression = new ConditionExpression();
+
+    builder(expression);
+
+    this.$conditions.push({ type: 'And', conditions: expression.$conditions });
+
+    return this;
+  }
+
+  /**
+   * Add an or expression to the conditions.
+   */
+  or(builder: (expression: ConditionExpression) => void): ConditionExpression {
+    const expression = new ConditionExpression();
+
+    builder(expression);
+
+    this.$conditions.push({ type: 'Or', conditions: expression.$conditions });
+
+    return this;
+  }
 
   /**
    * Serialize the condition expression to a string.
@@ -110,18 +267,8 @@ export class ConditionExpression implements Expression {
     }
 
     switch (condition.type) {
-      case 'Equals':
-        return this.serializeBinaryExpression(condition, attributes, '=');
-      case 'NotEquals':
-        return this.serializeBinaryExpression(condition, attributes, '<>');
-      case 'LessThan':
-        return this.serializeBinaryExpression(condition, attributes, '<');
-      case 'LessThanOrEqual':
-        return this.serializeBinaryExpression(condition, attributes, '<=');
-      case 'GreaterThan':
-        return this.serializeBinaryExpression(condition, attributes, '>');
-      case 'GreaterThanOrEqual':
-        return this.serializeBinaryExpression(condition, attributes, '>=');
+      case 'Binary':
+        return this.serializeBinaryExpression(condition, attributes);
       case 'Between':
         const subject = attributes.addName(condition.subject);
 
@@ -197,8 +344,7 @@ export class ConditionExpression implements Expression {
    */
   private serializeBinaryExpression(
     condition: BinaryExpressionPredicate & ConditionExpressionSubject,
-    attributes: ExpressionAttributes,
-    comparator: string
+    attributes: ExpressionAttributes
   ): string {
     const subject = attributes.addName(condition.subject);
 
@@ -207,7 +353,7 @@ export class ConditionExpression implements Expression {
       attributes
     );
 
-    return `${subject} ${comparator} ${operand}`;
+    return `${subject} ${condition.operator} ${operand}`;
   }
 
   /**
@@ -249,6 +395,8 @@ export class ConditionExpression implements Expression {
    * Serialize the expression to a string.
    */
   serialize(attributes: ExpressionAttributes): string {
-    return this.serializeConditionExpression(this.$condition, attributes);
+    const condition: Condition = { type: 'And', conditions: this.$conditions };
+
+    return this.serializeConditionExpression(condition, attributes);
   }
 }
