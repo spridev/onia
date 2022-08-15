@@ -52,11 +52,11 @@ test('serializes inequality conditions', function (t) {
 test('serializes less than conditions', function (t) {
   const attributes = new ExpressionAttributes();
 
-  const expression = new ConditionExpression().where('total', '<', 25);
+  const expression = new ConditionExpression().where('age', '<', 25);
 
   t.is(expression.serialize(attributes), '#name0 < :value1');
 
-  t.deepEqual(attributes.names, { '#name0': 'total' });
+  t.deepEqual(attributes.names, { '#name0': 'age' });
   t.deepEqual(attributes.values, { ':value1': { N: '25' } });
 });
 
