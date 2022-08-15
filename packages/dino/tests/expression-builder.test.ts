@@ -31,11 +31,7 @@ test('compiles update expressions', function (t) {
 test('compiles condition expressions', function (t) {
   const builder = new ExpressionBuilder('onia-table');
 
-  const condition = new ConditionExpression({
-    type: 'Equals',
-    subject: 'name',
-    value: 'spri',
-  });
+  const condition = new ConditionExpression().where('name', '=', 'spri');
 
   const expression = builder.compile((attributes) => ({
     ConditionExpression: condition.serialize(attributes),
