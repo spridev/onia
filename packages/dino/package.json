@@ -1,7 +1,7 @@
 {
   "name": "@onia/dino",
   "description": "DynamoDB Expression Builder",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "license": "MIT",
   "repository": "git://github.com/spridev/onia",
   "homepage": "https://github.com/spridev/onia/tree/main/packages/dino",
