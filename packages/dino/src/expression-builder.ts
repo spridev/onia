@@ -3,9 +3,16 @@ import { ExpressionAttributes } from './expression-attributes';
 
 export class ExpressionBuilder {
   /**
+   * The DynamoDB table name.
+   */
+  public readonly table: string;
+
+  /**
    * Create a new expression builder.
    */
-  constructor(private $table: string = 'table') {}
+  constructor(table = 'table') {
+    this.table = table;
+  }
 
   /**
    * Compile the expression.
@@ -17,7 +24,7 @@ export class ExpressionBuilder {
 
     return {
       ...serializer(attributes),
-      TableName: this.$table,
+      TableName: this.table,
       ExpressionAttributeNames: attributes.names,
       ExpressionAttributeValues: attributes.values,
     };
