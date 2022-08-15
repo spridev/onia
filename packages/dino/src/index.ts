@@ -1,7 +1,6 @@
 export * from './attribute-path';
 export * from './attribute-value';
 export * from './attribute-value-model';
-export * from './compiled-expression';
 export * from './condition-expression';
 export * from './expression';
 export * from './expression-attributes';
