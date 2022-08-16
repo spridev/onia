@@ -1,5 +1,11 @@
 # @onia/dino
 
+## 0.3.2
+
+### Patch Changes
+
+- 3dcb626: Hide the expression serialization logic inside the `ExpressionBuilder` class.
+
 ## 0.3.1
 
 ### Patch Changes
