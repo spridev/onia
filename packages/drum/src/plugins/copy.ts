@@ -7,8 +7,8 @@ import { sync } from 'fast-glob';
 import type { Plugin } from 'rollup';
 
 export interface CopyRule {
-  from: string[];
   to: string;
+  from: string;
   rename?: string;
   required?: boolean;
 }
@@ -21,10 +21,10 @@ export function copy(rules: CopyRule[]): Plugin {
     name: 'copy',
     buildEnd(): void {
       for (const rule of rules) {
-        const sources = sync(rule.from.map((path) => path.replace(/\\/g, '/')));
+        const sources = sync(rule.from.replace(/\\/g, '/'));
 
         if (rule.required && sources.length === 0) {
-          throw new Error(`No files found matching ${rule.from.join(', ')}`);
+          throw new Error(`No files found matching ${rule.from}`);
         }
 
         for (const source of sources) {

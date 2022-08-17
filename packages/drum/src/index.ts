@@ -107,12 +107,12 @@ export function bundle(bundleOptions: BundleOptions): RollupOptions[] {
 
     const copyRules: CopyRule[] = [
       {
-        from: [Path.join(packageMetadata.location, 'package.json')],
+        from: Path.join(packageMetadata.location, 'package.json'),
         to: codeDestination,
         required: true,
       },
       {
-        from: [Path.join(packageMetadata.location, 'Makefile')],
+        from: Path.join(packageMetadata.location, 'Makefile'),
         to: packageDestination,
         required: packageOptions.type === 'extension',
       },
@@ -120,7 +120,7 @@ export function bundle(bundleOptions: BundleOptions): RollupOptions[] {
 
     if (packageOptions.type === 'extension') {
       copyRules.push({
-        from: [Path.join(packageMetadata.location, 'exec')],
+        from: Path.join(packageMetadata.location, 'exec'),
         to: Path.join(packageDestination, 'extensions'),
         rename: packageMetadata.name,
         required: true,
@@ -128,7 +128,13 @@ export function bundle(bundleOptions: BundleOptions): RollupOptions[] {
     }
 
     if (packageOptions.copy) {
-      copyRules.push(...packageOptions.copy);
+      copyRules.push(
+        ...packageOptions.copy.map(({ from, to, ...options }) => ({
+          from: Path.join(packageMetadata.location, from),
+          to: Path.join(packageDestination, to),
+          ...options,
+        }))
+      );
     }
 
     rollupOptions.push({
