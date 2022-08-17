@@ -128,7 +128,13 @@ export function bundle(bundleOptions: BundleOptions): RollupOptions[] {
     }
 
     if (packageOptions.copy) {
-      copyRules.push(...packageOptions.copy);
+      copyRules.push(
+        ...packageOptions.copy.map(({ from, to, ...options }) => ({
+          from: Path.join(packageMetadata.location, from),
+          to: Path.join(packageDestination, to),
+          ...options,
+        }))
+      );
     }
 
     rollupOptions.push({
