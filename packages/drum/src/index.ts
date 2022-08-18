@@ -140,7 +140,7 @@ export function bundle(bundleOptions: BundleOptions): RollupOptions[] {
     rollupOptions.push({
       input: codeEntrypoint,
       onwarn: onWarning,
-      external: packageMetadata.dependencies,
+      external: [...packageMetadata.dependencies, /^node:/],
       output: {
         dir: codeDestination,
         format: codeFormat,
