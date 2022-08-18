@@ -1,5 +1,11 @@
 # @onia/drum
 
+## 0.3.0
+
+### Minor Changes
+
+- 4a63f28: Prepend the package location to the user-defined copy rules.
+
 ## 0.2.0
 
 ### Minor Changes
