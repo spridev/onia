@@ -1,0 +1,27 @@
+{
+  "name": "@onia/wire",
+  "description": "Lambda HTTP Router",
+  "version": "0.0.0",
+  "license": "MIT",
+  "repository": "git://github.com/spridev/onia",
+  "homepage": "https://github.com/spridev/onia/tree/main/packages/wire",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "files": [
+    "build/**/*"
+  ],
+  "dependencies": {
+    "@types/hapi__hapi": "^20.0.0",
+    "@hapi/hapi": "^20.0.0"
+  },
+  "devDependencies": {
+    "@hapi/hoek": "^10.0.0"
+  },
+  "peerDependencies": {
+    "@types/aws-lambda": "^8.0.0"
+  },
+  "scripts": {
+    "test": "c8 ava",
+    "build": "tsc"
+  }
+}
