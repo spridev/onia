@@ -18,7 +18,7 @@ interface RenderChunkResult {
 const SHEBANG_RX = /^#!.*/;
 
 /**
- * Plugin to preserve shebang lines.
+ * Preserve shebang lines.
  */
 export function bang(): Plugin {
   const shebangs: Record<string, string> = {};
