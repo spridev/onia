@@ -1,5 +1,11 @@
 # @onia/drum
 
+## 0.3.2
+
+### Patch Changes
+
+- b418649: Change the code destination for packages of type `extension`.
+
 ## 0.3.1
 
 ### Patch Changes
