@@ -6,6 +6,7 @@ import types from '@rollup/plugin-typescript';
 import { bang } from './plugins/bang';
 import { clean } from './plugins/clean';
 import { copy, CopyRule } from './plugins/copy';
+import { layer } from './plugins/layer';
 import { ugly } from './plugins/ugly';
 
 import type { RollupOptions, RollupWarning, WarningHandler } from 'rollup';
@@ -148,6 +149,7 @@ export function bundle(bundleOptions: BundleOptions): RollupOptions[] {
       },
       plugins: [
         clean(packageDestination),
+        layer(),
         types(),
         bang(),
         ugly(),
