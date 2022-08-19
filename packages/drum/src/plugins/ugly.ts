@@ -13,7 +13,7 @@ interface RenderChunkResult {
 }
 
 /**
- * Plugin to minify code.
+ * Minify the code output.
  */
 export function ugly(): Plugin {
   return {

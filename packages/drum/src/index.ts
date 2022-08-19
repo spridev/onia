@@ -6,6 +6,7 @@ import types from '@rollup/plugin-typescript';
 import { bang } from './plugins/bang';
 import { clean } from './plugins/clean';
 import { copy, CopyRule } from './plugins/copy';
+import { layer } from './plugins/layer';
 import { ugly } from './plugins/ugly';
 
 import type { RollupOptions, RollupWarning, WarningHandler } from 'rollup';
@@ -99,7 +100,7 @@ export function bundle(bundleOptions: BundleOptions): RollupOptions[] {
     );
 
     const codeDestination =
-      packageOptions.type === 'extension'
+      packageOptions.type !== 'function'
         ? Path.join(packageDestination, packageMetadata.name)
         : packageDestination;
 
@@ -111,12 +112,15 @@ export function bundle(bundleOptions: BundleOptions): RollupOptions[] {
         to: codeDestination,
         required: true,
       },
-      {
+    ];
+
+    if (packageOptions.type !== 'function') {
+      copyRules.push({
         from: Path.join(packageMetadata.location, 'Makefile'),
         to: packageDestination,
-        required: packageOptions.type === 'extension',
-      },
-    ];
+        required: true,
+      });
+    }
 
     if (packageOptions.type === 'extension') {
       copyRules.push({
@@ -148,6 +152,7 @@ export function bundle(bundleOptions: BundleOptions): RollupOptions[] {
       },
       plugins: [
         clean(packageDestination),
+        layer(),
         types(),
         bang(),
         ugly(),

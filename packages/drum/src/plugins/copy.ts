@@ -14,7 +14,7 @@ export interface CopyRule {
 }
 
 /**
- * Plugin to copy files from the source directory to the output directory.
+ * Copy files from the source directory to the output directory.
  */
 export function copy(rules: CopyRule[]): Plugin {
   return {
