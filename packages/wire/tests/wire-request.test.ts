@@ -11,9 +11,9 @@ test('decodes the event path from a proxy parameter', async function (t) {
 
   server.route({
     method: 'GET',
-    path: '/route',
+    path: '/proxy',
     handler(event) {
-      t.is(event.path, '/route');
+      t.is(event.path, '/proxy');
 
       return {};
     },
@@ -25,8 +25,44 @@ test('decodes the event path from a proxy parameter', async function (t) {
 
   await wire.proxy(
     makeEvent({
+      rawPath: '/$default/route',
+      requestContext: {
+        stage: '$default',
+      },
       pathParameters: {
-        proxy: 'route',
+        proxy: 'proxy',
+      },
+    })
+  );
+
+  t.plan(1);
+});
+
+test('decodes the event path from an empty proxy parameter', async function (t) {
+  const server = new Server();
+
+  server.route({
+    method: 'GET',
+    path: '/',
+    handler(event) {
+      t.is(event.path, '/');
+
+      return {};
+    },
+  });
+
+  await server.initialize();
+
+  const wire = new Wire(server);
+
+  await wire.proxy(
+    makeEvent({
+      rawPath: '/$default/route',
+      requestContext: {
+        stage: '$default',
+      },
+      pathParameters: {
+        proxy: '',
       },
     })
   );

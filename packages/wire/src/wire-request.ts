@@ -34,7 +34,7 @@ export class WireRequest {
   private get path(): string {
     const { pathParameters, rawPath, requestContext } = this.$event;
 
-    if (pathParameters?.proxy) {
+    if (pathParameters?.proxy !== undefined) {
       return `/${pathParameters.proxy}`;
     }
 
