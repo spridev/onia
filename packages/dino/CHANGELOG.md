@@ -1,5 +1,11 @@
 # @onia/dino
 
+## 0.3.3
+
+### Patch Changes
+
+- 8d6f6fe: Add `is` methods to check an object's type at runtime. This method is compatible with objects generated in other Node VMs.
+
 ## 0.3.2
 
 ### Patch Changes
