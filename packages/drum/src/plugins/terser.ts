@@ -15,9 +15,9 @@ interface RenderChunkResult {
 /**
  * Minify the code output.
  */
-export function ugly(): Plugin {
+export function terser(): Plugin {
   return {
-    name: 'ugly',
+    name: 'terser',
     async renderChunk(
       code: string,
       chunk: RenderedChunk,

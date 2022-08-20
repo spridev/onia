@@ -20,11 +20,11 @@ const SHEBANG_RX = /^#!.*/;
 /**
  * Preserve shebang lines.
  */
-export function bang(): Plugin {
+export function shebang(): Plugin {
   const shebangs: Record<string, string> = {};
 
   return {
-    name: 'bang',
+    name: 'shebang',
     transform(code: string, id: string): TransformResult {
       const match = code.match(SHEBANG_RX);
 

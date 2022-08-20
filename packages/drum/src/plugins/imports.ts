@@ -5,9 +5,9 @@ import type { Plugin } from 'rollup';
 /**
  * Preserve /opt/* imports.
  */
-export function layer(): Plugin {
+export function imports(): Plugin {
   return {
-    name: 'opt',
+    name: 'imports',
     resolveId: {
       order: 'pre',
       handler(source) {
