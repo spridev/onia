@@ -1,5 +1,11 @@
 # @onia/drum
 
+## 0.4.0
+
+### Minor Changes
+
+- ebe24bd: Change the bundle configuration format, and automatically create necessary `Makefile` and bash scripts.
+
 ## 0.3.2
 
 ### Patch Changes
