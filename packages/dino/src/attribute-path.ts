@@ -3,6 +3,9 @@ const RIGHT_BRACKET = ']';
 const PATH_DELIMITER = '.';
 const ESCAPE_CHARACTER = '\\';
 
+const BASE_TAG = 'AttributePath';
+const FULL_TAG = `[object ${BASE_TAG}]`;
+
 const enum State {
   ControlCharacter = 1000,
   PathIdentifier,
@@ -21,9 +24,24 @@ export type PathElement = PathIdentifier | PathListIndex;
 
 export class AttributePath {
   /**
+   * The attribute path tag.
+   */
+  public readonly [Symbol.toStringTag] = BASE_TAG;
+
+  /**
    * The attribute path elements.
    */
   public readonly elements: PathElement[];
+
+  /**
+   * Determine if the given value is an AttributePath.
+   */
+  static is(value: any): value is AttributePath {
+    return (
+      value instanceof AttributePath ||
+      Object.prototype.toString.call(value) === FULL_TAG
+    );
+  }
 
   /**
    * Convert a string to path elements.
@@ -125,7 +143,7 @@ export class AttributePath {
    * Wrap the given path in an attribute path.
    */
   static wrap(path: AttributePath | string): AttributePath {
-    if (path instanceof AttributePath) {
+    if (AttributePath.is(path)) {
       return path;
     }
 

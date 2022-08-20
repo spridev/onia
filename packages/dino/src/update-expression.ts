@@ -147,8 +147,7 @@ export class UpdateExpression implements Expression {
     for (const [path, value] of this.$set.entries()) {
       phrases.push(
         `${attributes.addName(path)} = ${
-          value instanceof FunctionExpression ||
-          value instanceof NumericExpression
+          FunctionExpression.is(value) || NumericExpression.is(value)
             ? value.serialize(attributes)
             : attributes.addValue(value)
         }`

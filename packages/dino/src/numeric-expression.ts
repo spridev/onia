@@ -4,6 +4,9 @@ import { Expression } from './expression';
 import { ExpressionAttributes } from './expression-attributes';
 import { FunctionExpression } from './function-expression';
 
+const BASE_TAG = 'NumericExpression';
+const FULL_TAG = `[object ${BASE_TAG}]`;
+
 export type NumericOperand =
   | AttributePath
   | AttributeValue
@@ -12,6 +15,21 @@ export type NumericOperand =
   | number;
 
 export class NumericExpression implements Expression {
+  /**
+   * The numeric expression tag.
+   */
+  public readonly [Symbol.toStringTag] = BASE_TAG;
+
+  /**
+   * Determine if the given value is a NumericExpression.
+   */
+  static is(value: any): value is NumericExpression {
+    return (
+      value instanceof NumericExpression ||
+      Object.prototype.toString.call(value) === FULL_TAG
+    );
+  }
+
   /**
    * Create a new numeric expression.
    */
@@ -28,11 +46,11 @@ export class NumericExpression implements Expression {
     operand: NumericOperand,
     attributes: ExpressionAttributes
   ): string {
-    if (operand instanceof FunctionExpression) {
+    if (FunctionExpression.is(operand)) {
       return operand.serialize(attributes);
     }
 
-    return operand instanceof AttributePath || typeof operand === 'string'
+    return AttributePath.is(operand) || typeof operand === 'string'
       ? attributes.addName(operand)
       : attributes.addValue(operand);
   }

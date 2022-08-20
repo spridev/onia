@@ -262,7 +262,7 @@ export class ConditionExpression implements Expression {
     condition: Condition,
     attributes: ExpressionAttributes
   ): string {
-    if (condition instanceof FunctionExpression) {
+    if (FunctionExpression.is(condition)) {
       return condition.serialize(attributes);
     }
 
@@ -382,11 +382,11 @@ export class ConditionExpression implements Expression {
     operand: ComparisonOperand,
     attributes: ExpressionAttributes
   ): string {
-    if (operand instanceof FunctionExpression) {
+    if (FunctionExpression.is(operand)) {
       return operand.serialize(attributes);
     }
 
-    return operand instanceof AttributePath
+    return AttributePath.is(operand)
       ? attributes.addName(operand)
       : attributes.addValue(operand);
   }
