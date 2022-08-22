@@ -1,5 +1,11 @@
 # @onia/dino
 
+## 0.4.0
+
+### Minor Changes
+
+- 25b7002: Remove the `ExpressionBuilder` class in favor of a simple `compile` function.
+
 ## 0.3.3
 
 ### Patch Changes
