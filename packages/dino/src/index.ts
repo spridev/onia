@@ -4,7 +4,7 @@ export * from './attribute-value-model';
 export * from './condition-expression';
 export * from './expression';
 export * from './expression-attributes';
-export * from './expression-builder';
+export * from './expression-compiler';
 export * from './function-expression';
 export * from './numeric-expression';
 export * from './projection-expression';

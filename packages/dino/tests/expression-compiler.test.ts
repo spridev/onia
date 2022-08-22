@@ -9,16 +9,15 @@ import {
 import { marshall } from '@aws-sdk/util-dynamodb';
 
 import {
+  compile,
   ConditionExpression,
-  ExpressionBuilder,
   ProjectionExpression,
   UpdateExpression,
 } from '../src';
 
 test('compiles get inputs', function (t) {
-  const builder = new ExpressionBuilder('onia-table');
-
-  const input = builder.compile<GetItemCommandInput>({
+  const input = compile<GetItemCommandInput>({
+    TableName: 'onia-table',
     Key: marshall({ PK: 'PK' }),
     ProjectionExpression: new ProjectionExpression().add('name', 'age'),
   });
@@ -36,9 +35,8 @@ test('compiles get inputs', function (t) {
 });
 
 test('compiles put inputs', function (t) {
-  const builder = new ExpressionBuilder('onia-table');
-
-  const input = builder.compile<PutItemCommandInput>({
+  const input = compile<PutItemCommandInput>({
+    TableName: 'onia-table',
     Item: marshall({ name: 'spri' }),
   });
 
@@ -51,9 +49,8 @@ test('compiles put inputs', function (t) {
 });
 
 test('compiles update inputs', function (t) {
-  const builder = new ExpressionBuilder('onia-table');
-
-  const input = builder.compile<UpdateItemCommandInput>({
+  const input = compile<UpdateItemCommandInput>({
+    TableName: 'onia-table',
     Key: marshall({ PK: 'PK' }),
     UpdateExpression: new UpdateExpression().set('age', 25),
     ConditionExpression: new ConditionExpression().where('age', '=', 24),
@@ -75,9 +72,8 @@ test('compiles update inputs', function (t) {
 });
 
 test('compiles query inputs', function (t) {
-  const builder = new ExpressionBuilder('onia-table');
-
-  const input = builder.compile<QueryCommandInput>({
+  const input = compile<QueryCommandInput>({
+    TableName: 'onia-table',
     IndexName: 'GSI1',
     FilterExpression: new ConditionExpression().contains('PK', 'Y'),
     KeyConditionExpression: new ConditionExpression().where('GSI1PK', '=', 'X'),
