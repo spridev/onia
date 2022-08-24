@@ -20,12 +20,6 @@ Onia helps you build your application on Amazon Web Services.
 |:------------------------------------------------------------------------|:----------------------------|:---------------------------------------------------------------------------------------------------:|
 | [`@onia/dino`](https://github.com/spridev/onia/tree/main/packages/dino) | DynamoDB Expression Builder | [![npm version](https://img.shields.io/npm/v/@onia/dino)](https://www.npmjs.com/package/@onia/dino) |
 
-### API Gateway
-
-| Name                                                                    | Description         |                                               Version                                               |
-|:------------------------------------------------------------------------|:--------------------|:---------------------------------------------------------------------------------------------------:|
-| [`@onia/gate`](https://github.com/spridev/onia/tree/main/packages/gate) | API Gateway Wrapper | [![npm version](https://img.shields.io/npm/v/@onia/gate)](https://www.npmjs.com/package/@onia/gate) |
-
 ### Miscellaneous
 
 | Name                                                                    | Description         |                                               Version                                               |
