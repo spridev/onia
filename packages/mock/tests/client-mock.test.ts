@@ -99,6 +99,23 @@ test('returns the nth recorded call', async function (t) {
   t.is(mock.call(3), undefined);
 });
 
+test('returns the last recorded call', async function (t) {
+  const { mock } = t.context;
+
+  const client = new SQSClient({});
+
+  mock.on(ListQueuesCommand).resolves({});
+
+  await client.send(listOneCommand);
+
+  t.like(mock.last(), listOneCommand.input);
+
+  await client.send(listTwoCommand);
+
+  t.like(mock.last(), listTwoCommand.input);
+  t.like(mock.last(), listTwoCommand.input);
+});
+
 // Client
 
 test('resets the stub history', async function (t) {

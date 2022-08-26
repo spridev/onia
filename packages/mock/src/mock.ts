@@ -57,6 +57,13 @@ export class Mock<TInput extends object, TOutput extends MetadataBearer> {
   }
 
   /**
+   * Get the last recorded call.
+   */
+  last(): TInput | undefined {
+    return this.call(this.count() - 1);
+  }
+
+  /**
    * Get the input of the given call.
    */
   private input(call: CommandCall<TInput, TOutput>): TInput | undefined {
