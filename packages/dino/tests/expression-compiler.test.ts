@@ -30,7 +30,6 @@ test('compiles get inputs', function (t) {
       '#name0': 'name',
       '#name1': 'age',
     },
-    ExpressionAttributeValues: undefined,
   });
 });
 
@@ -43,8 +42,6 @@ test('compiles put inputs', function (t) {
   t.deepEqual(input, {
     TableName: 'onia-table',
     Item: { name: { S: 'spri' } },
-    ExpressionAttributeNames: undefined,
-    ExpressionAttributeValues: undefined,
   });
 });
 

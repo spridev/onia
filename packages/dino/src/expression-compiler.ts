@@ -59,10 +59,18 @@ export function compile<T extends Partial<OutputExpressions>>(
       input.KeyConditionExpression.serialize(attributes);
   }
 
+  const names = attributes.names
+    ? { ExpressionAttributeNames: attributes.names }
+    : {};
+
+  const values = attributes.values
+    ? { ExpressionAttributeValues: attributes.values }
+    : {};
+
   return {
     ...input,
     ...output,
-    ExpressionAttributeNames: attributes.names,
-    ExpressionAttributeValues: attributes.values,
+    ...names,
+    ...values,
   };
 }
