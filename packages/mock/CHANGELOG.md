@@ -1,5 +1,11 @@
 # @onia/mock
 
+## 0.2.1
+
+### Patch Changes
+
+- 717365c: Add a `last` method to the `Mock` class to easily retrieve the last recorded call.
+
 ## 0.2.0
 
 ### Minor Changes
