@@ -1,7 +1,7 @@
 {
   "name": "@onia/duck",
   "description": "DynamoDB Operations",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "license": "MIT",
   "repository": "git://github.com/spridev/onia",
   "homepage": "https://github.com/spridev/onia/tree/main/packages/duck",
@@ -13,10 +13,10 @@
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.0.0",
     "@aws-sdk/util-dynamodb": "^3.0.0",
-    "@onia/dino": "^0.4.1"
+    "@onia/dino": "^0.4.0"
   },
   "devDependencies": {
-    "@onia/mock": "^0.2.1"
+    "@onia/mock": "^0.2.0"
   },
   "scripts": {
     "test": "c8 ava",
