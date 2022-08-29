@@ -1,5 +1,11 @@
 # @onia/dino
 
+## 0.4.1
+
+### Patch Changes
+
+- 6e0646c: Remove undefined expression attributes on compilation.
+
 ## 0.4.0
 
 ### Minor Changes
