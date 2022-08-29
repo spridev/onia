@@ -109,6 +109,25 @@ test('returns the nth recorded call', async function (t) {
   t.is(head.call(3), undefined);
 });
 
+test('returns the last recorded call', async function (t) {
+  const { mock } = t.context;
+
+  const client = new S3Client({});
+
+  const create = mock.on(CreateBucketCommand).resolves({});
+  const remove = mock.on(DeleteBucketCommand).resolves({});
+
+  await client.send(createCommand);
+
+  t.like(create.last(), createCommand.input);
+  t.is(remove.last(), undefined);
+
+  await client.send(deleteCommand);
+
+  t.like(create.last(), createCommand.input);
+  t.like(remove.last(), deleteCommand.input);
+});
+
 // Command
 
 test('makes the stub return the given value', async function (t) {
