@@ -19,3 +19,10 @@ export async function collect<T>(generator: AsyncGenerator<T>): Promise<T[]> {
 export function hash(value: string): string {
   return createHash('md5').update(value).digest('hex');
 }
+
+/**
+ * Sleep for the given amount of time.
+ */
+export async function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
