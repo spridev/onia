@@ -114,7 +114,7 @@ test('throws when the collection size limit is exceeded', async function (t) {
 
   const read = new AtomicRead(ddb);
 
-  for (let index = 0; index < 26; index++) {
+  for (let index = 0; index < 101; index++) {
     read.get({ TableName: 'onia', Key: marshall({ PK: String(index) }) });
   }
 

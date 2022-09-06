@@ -27,7 +27,7 @@ export class AtomicWrite {
   /**
    * The transaction max size.
    */
-  private static readonly MAX_SIZE = 25;
+  private static readonly MAX_SIZE = 100;
 
   /**
    * The transaction items.
