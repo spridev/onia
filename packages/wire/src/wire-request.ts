@@ -21,7 +21,7 @@ export class WireRequest {
   private get url(): string {
     const { rawQueryString } = this.$event;
 
-    if (rawQueryString.length > 0) {
+    if (rawQueryString?.length > 0) {
       return `${this.path}?${rawQueryString}`;
     }
 
@@ -32,13 +32,15 @@ export class WireRequest {
    * The request path.
    */
   private get path(): string {
-    const { pathParameters, rawPath, requestContext } = this.$event;
+    const { pathParameters } = this.$event;
 
     if (pathParameters?.proxy !== undefined) {
       return `/${pathParameters.proxy}`;
     }
 
-    if (requestContext.stage) {
+    const { rawPath, requestContext } = this.$event;
+
+    if (requestContext?.stage) {
       return rawPath.replace(`/${requestContext.stage}`, '');
     }
 
@@ -49,14 +51,14 @@ export class WireRequest {
    * The request method.
    */
   private get method(): string {
-    return this.$event.requestContext.http.method;
+    return this.$event.requestContext?.http?.method;
   }
 
   /**
    * The request remote address.
    */
   private get remoteAddress(): string {
-    return this.$event.requestContext.http.sourceIp;
+    return this.$event.requestContext?.http?.sourceIp;
   }
 
   /**
@@ -65,9 +67,11 @@ export class WireRequest {
   private get headers(): Record<string, string> {
     const headers: Record<string, string> = {};
 
-    for (const [key, value] of Object.entries(this.$event.headers)) {
-      if (value !== undefined) {
-        headers[key] = value;
+    if (this.$event.headers) {
+      for (const [key, value] of Object.entries(this.$event.headers)) {
+        if (value !== undefined) {
+          headers[key] = value;
+        }
       }
     }
 
@@ -95,11 +99,13 @@ export class WireRequest {
    * The request auth.
    */
   private get auth(): ServerInjectOptions['auth'] {
-    if (!('authorizer' in this.$event.requestContext)) {
+    const { requestContext } = this.$event;
+
+    if (!requestContext || !('authorizer' in requestContext)) {
       return undefined;
     }
 
-    const { authorizer } = this.$event.requestContext;
+    const { authorizer } = requestContext;
 
     if ('jwt' in authorizer) {
       const { scopes, claims } = authorizer.jwt;

@@ -20,33 +20,6 @@ async function createServer(): Promise<Server> {
   return server;
 }
 
-test('creates a wire from a single route', async function (t) {
-  const wire = Wire.single({
-    handler(event) {
-      t.like(event.params, { names: 'spri/onia' });
-
-      return 'onia';
-    },
-  });
-
-  const result = await wire.proxy(
-    makeEvent({
-      routeKey: 'GET /users/{names+}',
-      rawPath: '/$default/users/spri/onia',
-      requestContext: {
-        stage: '$default',
-      },
-      pathParameters: {
-        names: 'spri/onia',
-      },
-    })
-  );
-
-  t.is(result.body, 'onia');
-
-  t.plan(2);
-});
-
 test('creates a wire from a server instance', async function (t) {
   const server = await createServer();
 
@@ -65,6 +38,26 @@ test('creates a wire from a server instance', async function (t) {
 
 test('creates a wire from a builder function', async function (t) {
   const wire = new Wire(() => createServer());
+
+  const result = await wire.proxy(
+    makeEvent({
+      pathParameters: {
+        proxy: 'route',
+      },
+    })
+  );
+
+  t.is(result.body, 'onia');
+});
+
+test('creates a wire from one or many routes', async function (t) {
+  const wire = Wire.routes([
+    {
+      method: 'GET',
+      path: '/route',
+      handler: () => 'onia',
+    },
+  ]);
 
   const result = await wire.proxy(
     makeEvent({

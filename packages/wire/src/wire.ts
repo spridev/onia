@@ -1,4 +1,9 @@
-import { Server, RouteOptions } from '@hapi/hapi';
+import {
+  Server,
+  ServerInjectOptions,
+  ServerInjectResponse,
+  ServerRoute,
+} from '@hapi/hapi';
 
 import { AWSEvent } from './aws-event';
 import { AWSResult } from './aws-result';
@@ -18,15 +23,13 @@ export class Wire {
   private $server: Server | undefined;
 
   /**
-   * Create a new server from a single route.
+   * Create a new wire from one or many routes.
    */
-  static single(options: RouteOptions): Wire {
-    return new Wire(async function (event) {
+  static routes(routes: ServerRoute | ServerRoute[]): Wire {
+    return new Wire(async function () {
       const server = new Server();
 
-      const [method, path] = event.routeKey.replace('+', '*').split(' ');
-
-      server.route({ method, path, options });
+      server.route(routes);
 
       await server.initialize();
 
@@ -42,26 +45,33 @@ export class Wire {
   }
 
   /**
-   * Proxy API Gateway events to the Hapi server.
+   * Inject API Gateway events into the Hapi server.
    */
   async proxy(event: AWSEvent): Promise<AWSResult> {
-    if (!this.$server) {
-      this.$server = await this.build(event);
-    }
-
     const request = new WireRequest(event);
 
-    const response = await this.$server.inject(request.decode());
+    const response = await this.inject(request.decode());
 
     return new WireResponse(response).encode();
   }
 
   /**
-   * Build the server instance.
+   * Inject a request into the Hapi server.
    */
-  private async build(event: AWSEvent): Promise<Server> {
+  async inject(options: ServerInjectOptions): Promise<ServerInjectResponse> {
+    if (!this.$server) {
+      this.$server = await this.build();
+    }
+
+    return this.$server.inject(options);
+  }
+
+  /**
+   * Build a server instance.
+   */
+  private async build(): Promise<Server> {
     return typeof this.$builder === 'function'
-      ? await this.$builder(event)
+      ? await this.$builder()
       : this.$builder;
   }
 }
