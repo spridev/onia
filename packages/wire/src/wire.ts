@@ -1,4 +1,9 @@
-import { Server, ServerInjectOptions, ServerInjectResponse } from '@hapi/hapi';
+import {
+  Server,
+  ServerInjectOptions,
+  ServerInjectResponse,
+  ServerRoute,
+} from '@hapi/hapi';
 
 import { AWSEvent } from './aws-event';
 import { AWSResult } from './aws-result';
@@ -16,6 +21,21 @@ export class Wire {
    * The server instance.
    */
   private $server: Server | undefined;
+
+  /**
+   * Create a new wire from one or many routes.
+   */
+  static routes(routes: ServerRoute | ServerRoute[]): Wire {
+    return new Wire(async function () {
+      const server = new Server();
+
+      server.route(routes);
+
+      await server.initialize();
+
+      return server;
+    });
+  }
 
   /**
    * Create a new wire.

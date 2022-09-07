@@ -50,6 +50,26 @@ test('creates a wire from a builder function', async function (t) {
   t.is(result.body, 'onia');
 });
 
+test('creates a wire from one or many routes', async function (t) {
+  const wire = Wire.routes([
+    {
+      method: 'GET',
+      path: '/route',
+      handler: () => 'onia',
+    },
+  ]);
+
+  const result = await wire.proxy(
+    makeEvent({
+      pathParameters: {
+        proxy: 'route',
+      },
+    })
+  );
+
+  t.is(result.body, 'onia');
+});
+
 test('caches the server instance in memory', async function (t) {
   const server = new Server();
 
