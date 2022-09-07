@@ -1,5 +1,11 @@
 # @onia/duck
 
+## 0.1.2
+
+### Patch Changes
+
+- 0838814: Increase the maximum number of actions in a single transaction from 25 to 100.
+
 ## 0.1.1
 
 ### Patch Changes
