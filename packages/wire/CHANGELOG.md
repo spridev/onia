@@ -1,5 +1,15 @@
 # @onia/wire
 
+## 0.2.0
+
+### Minor Changes
+
+- b9450cd: Add an `inject` method to inject requests into the Hapi server.
+
+### Patch Changes
+
+- b9450cd: Add a `routes` method to create a new Hapi server from one or many routes.
+
 ## 0.1.1
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @onia/cute
 
+## 0.2.2
+
+### Patch Changes
+
+- c1c08e2: Sort named imports.
+
 ## 0.2.1
 
 ### Patch Changes
