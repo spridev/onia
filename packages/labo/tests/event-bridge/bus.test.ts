@@ -14,8 +14,8 @@ import {
   DeleteQueueCommand,
   PurgeQueueCommand,
   ReceiveMessageCommand,
-  SetQueueAttributesCommand,
   SQSClient,
+  SetQueueAttributesCommand,
 } from '@aws-sdk/client-sqs';
 
 import { ClientMock, ClientType } from '@onia/mock';

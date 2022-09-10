@@ -9,10 +9,10 @@ import {
 import { marshall } from '@aws-sdk/util-dynamodb';
 
 import {
-  compile,
   ConditionExpression,
   ProjectionExpression,
   UpdateExpression,
+  compile,
 } from '../src';
 
 test('compiles get inputs', function (t) {

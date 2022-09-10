@@ -13,7 +13,7 @@ import { marshall } from '@aws-sdk/util-dynamodb';
 
 import { ClientMock, ClientType } from '@onia/mock';
 
-import { collect, Table } from '../src';
+import { Table, collect } from '../src';
 
 interface Item {
   name: string;

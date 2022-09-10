@@ -3,9 +3,9 @@
 import MagicString from 'magic-string';
 
 import type {
-  RenderedChunk,
   NormalizedOutputOptions,
   Plugin,
+  RenderedChunk,
   SourceMapInput,
   TransformResult,
 } from 'rollup';

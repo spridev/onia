@@ -2,9 +2,9 @@ import anyTest, { TestFn } from 'ava';
 
 import {
   DynamoDBClient,
-  TransactionCanceledException,
   TransactWriteItemsCommand,
   TransactWriteItemsCommandInput,
+  TransactionCanceledException,
 } from '@aws-sdk/client-dynamodb';
 import { marshall } from '@aws-sdk/util-dynamodb';
 

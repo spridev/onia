@@ -1,9 +1,9 @@
 import {
   DescribeParametersCommand,
+  DescribeParametersCommandInput,
   GetParametersCommand,
   ParameterStringFilter,
   SSMClient,
-  DescribeParametersCommandInput,
 } from '@aws-sdk/client-ssm';
 
 import { Hooks } from '../hooks';

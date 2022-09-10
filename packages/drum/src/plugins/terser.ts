@@ -1,10 +1,10 @@
 import { minify } from 'terser';
 
 import type {
-  SourceMapInput,
-  Plugin,
   NormalizedOutputOptions,
+  Plugin,
   RenderedChunk,
+  SourceMapInput,
 } from 'rollup';
 
 interface RenderChunkResult {

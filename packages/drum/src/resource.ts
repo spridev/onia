@@ -2,13 +2,13 @@ import * as Path from 'node:path';
 
 import typescript from '@rollup/plugin-typescript';
 
-import { getPackageMetadata, PackageMetadata } from './package';
+import { PackageMetadata, getPackageMetadata } from './package';
 import { clean } from './plugins/clean';
-import { copy, CopyRule } from './plugins/copy';
+import { CopyRule, copy } from './plugins/copy';
 import { imports } from './plugins/imports';
 import { shebang } from './plugins/shebang';
 import { terser } from './plugins/terser';
-import { write, WriteRule } from './plugins/write';
+import { WriteRule, write } from './plugins/write';
 
 import type {
   ModuleFormat,

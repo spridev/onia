@@ -6,7 +6,7 @@ import {
 } from '@aws-sdk/client-dynamodb';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 
-import { compile, SerializableInput } from '@onia/dino';
+import { SerializableInput, compile } from '@onia/dino';
 
 export interface AtomicReadInput {
   item: TransactGetItem;
