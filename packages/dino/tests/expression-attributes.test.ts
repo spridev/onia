@@ -24,11 +24,13 @@ test('exposes all values', function (t) {
   attributes.addValue('onia');
   attributes.addValue(() => 'dino');
   attributes.addValue(new AttributeValue('spri'));
+  attributes.addValue(new AttributeValue({ S: 'name' }, true));
 
   t.deepEqual(attributes.values, {
     ':value0': { S: 'onia' },
     ':value1': { S: 'dino' },
     ':value2': { S: 'spri' },
+    ':value3': { S: 'name' },
   });
 });
 

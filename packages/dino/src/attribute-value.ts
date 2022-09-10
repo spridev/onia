@@ -44,7 +44,7 @@ export class AttributeValue {
   /**
    * Create a new attribute value.
    */
-  constructor(value: any) {
-    this.element = marshall(value) as unknown as AttributeValueModel;
+  constructor(value: any, marshalled = false) {
+    this.element = marshalled ? value : marshall(value);
   }
 }
