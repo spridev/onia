@@ -1,5 +1,11 @@
 # @onia/dino
 
+## 0.4.2
+
+### Patch Changes
+
+- 92aa697: Accept marshalled attribute values.
+
 ## 0.4.1
 
 ### Patch Changes
