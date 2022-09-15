@@ -74,6 +74,30 @@ test('encodes the result body from a base64 string', async function (t) {
   t.is(result.isBase64Encoded, true);
 });
 
+test('encodes the result body using chunked encoding', async function (t) {
+  const server = new Server();
+
+  server.route({
+    method: 'GET',
+    path: '/route',
+    handler(_, h) {
+      return h
+        .response('7\r\nOnia\r\n4\r\nWire\r\n4\r\nText\r\n0\r\n\r\n')
+        .header('transfer-encoding', 'chunked');
+    },
+  });
+
+  await server.initialize();
+
+  const wire = new Wire(server);
+
+  const result = await wire.proxy(makeEvent({ rawPath: '/route' }));
+
+  t.is(result.body, 'OniaWireText');
+  t.is(result.statusCode, 200);
+  t.is(result.isBase64Encoded, false);
+});
+
 test('encodes the result headers', async function (t) {
   const server = new Server();
 
@@ -99,24 +123,4 @@ test('encodes the result headers', async function (t) {
   t.is(result.headers['content-length'], '4');
   t.is(result.headers['content-encoding'], 'gzip');
   t.is(result.headers['x-count'], '1,2');
-});
-
-test('throws when a result uses chunked encoding', async function (t) {
-  const server = new Server();
-
-  server.route({
-    method: 'GET',
-    path: '/route',
-    handler(_, h) {
-      return h.response('onia').header('transfer-encoding', 'chunked');
-    },
-  });
-
-  await server.initialize();
-
-  const wire = new Wire(server);
-
-  await t.throwsAsync(() => wire.proxy(makeEvent({ rawPath: '/route' })), {
-    message: 'API Gateway does not support chunked encoding',
-  });
 });

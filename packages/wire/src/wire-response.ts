@@ -26,7 +26,25 @@ export class WireResponse {
    * The response body.
    */
   private get body(): string {
-    const { rawPayload } = this.$response;
+    const { headers, rawPayload } = this.$response;
+
+    if (headers['transfer-encoding'] === 'chunked') {
+      const raw = rawPayload.toString().split('\r\n');
+
+      const parts: string[] = [];
+
+      for (let index = 0; index < raw.length; index += 2) {
+        const value = raw[index + 1];
+
+        if (value) {
+          parts.push(
+            value.slice(0, Math.max(0, Number.parseInt(raw[index], 16)))
+          );
+        }
+      }
+
+      return parts.join('');
+    }
 
     return rawPayload.toString(this.isBase64Encoded ? 'base64' : 'utf8');
   }
@@ -38,7 +56,7 @@ export class WireResponse {
     const { headers } = this.$response;
 
     if (headers['transfer-encoding'] === 'chunked') {
-      throw new Error('API Gateway does not support chunked encoding');
+      delete headers['transfer-encoding'];
     }
 
     return headers as Record<string, string>;
