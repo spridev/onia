@@ -1,5 +1,11 @@
 # @onia/wire
 
+## 0.2.1
+
+### Patch Changes
+
+- ce131c5: Add chunked encoding support.
+
 ## 0.2.0
 
 ### Minor Changes
