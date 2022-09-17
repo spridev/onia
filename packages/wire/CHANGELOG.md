@@ -1,5 +1,11 @@
 # @onia/wire
 
+## 0.2.2
+
+### Patch Changes
+
+- ff7dd09: Append a `content-length` header to each response.
+
 ## 0.2.1
 
 ### Patch Changes
