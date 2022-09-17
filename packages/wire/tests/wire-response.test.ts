@@ -77,13 +77,15 @@ test('encodes the result body from a base64 string', async function (t) {
 test('encodes the result body using chunked encoding', async function (t) {
   const server = new Server();
 
+  const body = [...Array.from({ length: 1024 })]
+    .map(() => Math.random().toString(36)[2])
+    .join('');
+
   server.route({
     method: 'GET',
     path: '/route',
     handler(_, h) {
-      return h
-        .response('7\r\nOnia\r\n4\r\nWire\r\n4\r\nText\r\n0\r\n\r\n')
-        .header('transfer-encoding', 'chunked');
+      return h.response(body).code(200);
     },
   });
 
@@ -91,11 +93,18 @@ test('encodes the result body using chunked encoding', async function (t) {
 
   const wire = new Wire(server);
 
-  const result = await wire.proxy(makeEvent({ rawPath: '/route' }));
+  const result = await wire.proxy(
+    makeEvent({
+      rawPath: '/route',
+      headers: {
+        'accept-encoding': 'gzip, deflate, br',
+      },
+    })
+  );
 
-  t.is(result.body, 'OniaWireText');
+  t.is(gunzipSync(Buffer.from(result.body, 'base64')).toString('utf8'), body);
   t.is(result.statusCode, 200);
-  t.is(result.isBase64Encoded, false);
+  t.is(result.isBase64Encoded, true);
 });
 
 test('encodes the result headers', async function (t) {
