@@ -15,12 +15,15 @@ export interface BundleOptions {
 export function bundle(options: BundleOptions): RollupOptions[] {
   return options.resources.map((resource) => {
     switch (resource.type) {
-      case 'extension':
+      case 'extension': {
         return new ExtensionResource(resource).bundle();
-      case 'function':
+      }
+      case 'function': {
         return new FunctionResource(resource).bundle();
-      case 'layer':
+      }
+      case 'layer': {
         return new LayerResource(resource).bundle();
+      }
     }
   });
 }

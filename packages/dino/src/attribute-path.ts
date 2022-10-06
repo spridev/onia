@@ -61,9 +61,10 @@ export class AttributePath {
     ) {
       if (state === State.PathIdentifier) {
         switch (current.value) {
-          case LEFT_BRACKET:
+          case LEFT_BRACKET: {
             state = State.PathListIndex;
-          case PATH_DELIMITER:
+          }
+          case PATH_DELIMITER: {
             if (collected === '') {
               throw new Error(
                 `Invalid control character encountered in path: ${path}`
@@ -72,7 +73,8 @@ export class AttributePath {
             elements.push({ name: collected });
             collected = '';
             break;
-          case ESCAPE_CHARACTER:
+          }
+          case ESCAPE_CHARACTER: {
             if (
               peek.value === PATH_DELIMITER ||
               peek.value === LEFT_BRACKET ||
@@ -81,12 +83,14 @@ export class AttributePath {
               current = peek;
               peek = iter.next();
             }
-          default:
+          }
+          default: {
             collected += current.value;
+          }
         }
       } else if (state === State.PathListIndex) {
         switch (current.value) {
-          case RIGHT_BRACKET:
+          case RIGHT_BRACKET: {
             const value = Number.parseInt(collected);
 
             if (!Number.isFinite(value)) {
@@ -99,6 +103,7 @@ export class AttributePath {
             collected = '';
             state = State.ControlCharacter;
             break;
+          }
           case '0':
           case '1':
           case '2':
@@ -108,26 +113,31 @@ export class AttributePath {
           case '6':
           case '7':
           case '8':
-          case '9':
+          case '9': {
             collected += current.value;
             break;
-          default:
+          }
+          default: {
             throw new Error(
               `Invalid array index character (${current.value}) encountered in path: ${path}`
             );
+          }
         }
       } else {
         switch (current.value) {
-          case LEFT_BRACKET:
+          case LEFT_BRACKET: {
             state = State.PathListIndex;
             break;
-          case PATH_DELIMITER:
+          }
+          case PATH_DELIMITER: {
             state = State.PathIdentifier;
             break;
-          default:
+          }
+          default: {
             throw new Error(
               `Bare identifier encountered between list index accesses in path: ${path}`
             );
+          }
         }
       }
     }

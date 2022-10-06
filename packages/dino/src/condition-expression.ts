@@ -267,9 +267,10 @@ export class ConditionExpression implements Expression {
     }
 
     switch (condition.type) {
-      case 'Binary':
+      case 'Binary': {
         return this.serializeBinaryExpression(condition, attributes);
-      case 'Between':
+      }
+      case 'Between': {
         const subject = attributes.addName(condition.subject);
 
         const lowerBound = this.serializeComparisonOperand(
@@ -283,47 +284,55 @@ export class ConditionExpression implements Expression {
         );
 
         return `${subject} BETWEEN ${lowerBound} AND ${upperBound}`;
-      case 'Membership':
+      }
+      case 'Membership': {
         return `${attributes.addName(condition.subject)} IN (${condition.values
           .map((v) => this.serializeComparisonOperand(v, attributes))
           .join(', ')})`;
-      case 'Exists':
+      }
+      case 'Exists': {
         return this.serializeFunctionExpression(
           'attribute_exists',
           condition,
           attributes
         );
-      case 'NotExists':
+      }
+      case 'NotExists': {
         return this.serializeFunctionExpression(
           'attribute_not_exists',
           condition,
           attributes
         );
-      case 'Type':
+      }
+      case 'Type': {
         return this.serializeFunctionExpression(
           'attribute_type',
           condition,
           attributes
         );
-      case 'Contains':
+      }
+      case 'Contains': {
         return this.serializeFunctionExpression(
           'contains',
           condition,
           attributes
         );
-      case 'BeginsWith':
+      }
+      case 'BeginsWith': {
         return this.serializeFunctionExpression(
           'begins_with',
           condition,
           attributes
         );
-      case 'Not':
+      }
+      case 'Not': {
         return `NOT (${this.serializeConditionExpression(
           condition.condition,
           attributes
         )})`;
+      }
       case 'And':
-      case 'Or':
+      case 'Or': {
         if (condition.conditions.length === 1) {
           return this.serializeConditionExpression(
             condition.conditions[0],
@@ -334,6 +343,7 @@ export class ConditionExpression implements Expression {
         return condition.conditions
           .map((c) => `(${this.serializeConditionExpression(c, attributes)})`)
           .join(` ${condition.type.toUpperCase()} `);
+      }
     }
 
     throw new Error('Unknown condition type');
