@@ -1,5 +1,11 @@
 # @onia/cute
 
+## 0.3.0
+
+### Minor Changes
+
+- 17fb19c: Bump `eslint-plugin-unicorn` to `v44.0.0`.
+
 ## 0.2.2
 
 ### Patch Changes
